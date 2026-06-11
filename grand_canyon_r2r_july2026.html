@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Grand Canyon Rim to Rim hike plan — July 18–19, 2026. North Kaibab to Bright Angel via Phantom Ranch.">
+<title>Grand Canyon R2R — July 18–19, 2026</title>
+<style>
+  :root {
+    --canyon-rust: #C4522A;
+    --canyon-rust-light: #F5E8E2;
+    --canyon-rust-dark: #8B3518;
+    --canyon-stone: #8A7560;
+    --canyon-sand: #F7F2EB;
+    --canyon-dusk: #2C1F14;
+    --canyon-sky: #4A7FA5;
+    --canyon-sky-light: #E8F2F9;
+    --canyon-sky-dark: #1E4F72;
+    --green: #2E7D4F;
+    --green-light: #E8F5ED;
+    --green-dark: #1A4D30;
+    --amber: #B06A00;
+    --amber-light: #FFF3E0;
+    --amber-dark: #7A4800;
+    --red: #B03030;
+    --red-light: #FDEAEA;
+    --red-dark: #7A1F1F;
+    --text: #1A1208;
+    --text-mid: #4A3F35;
+    --text-muted: #7A6E64;
+    --border: rgba(140,110,80,0.18);
+    --border-mid: rgba(140,110,80,0.32);
+    --surface: #FFFFFF;
+    --bg: var(--canyon-sand);
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--canyon-dusk);
+    color: #fff;
+    padding: 1.5rem 1.25rem 1.25rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.3px;
+  }
+  .header-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 3px;
+  }
+
+  /* ── Nav tabs ── */
+  .nav-scroll {
+    background: var(--canyon-dusk);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .nav-scroll::-webkit-scrollbar { display: none; }
+  .nav-tabs {
+    display: flex;
+    padding: 0 0.75rem 0;
+    gap: 0;
+    white-space: nowrap;
+    min-width: max-content;
+  }
+  .nav-tab {
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.5);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+    font-family: inherit;
+  }
+  .nav-tab.active {
+    color: #fff;
+    border-bottom-color: var(--canyon-rust);
+  }
+  .nav-tab:hover:not(.active) { color: rgba(255,255,255,0.75); }
+
+  /* ── Pages ── */
+  .page { display: none; padding: 1.25rem; max-width: 680px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* ── Sections ── */
+  .section { margin-bottom: 1.75rem; }
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--canyon-rust);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── Alert banners ── */
+  .alert {
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.6rem;
+    border-left: 3px solid;
+  }
+  .alert-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+  .alert-body { font-size: 13px; line-height: 1.55; }
+  .alert.red { background: var(--red-light); border-color: var(--red); }
+  .alert.red .alert-title { color: var(--red-dark); }
+  .alert.red .alert-body { color: #5A2020; }
+  .alert.amber { background: var(--amber-light); border-color: var(--amber); }
+  .alert.amber .alert-title { color: var(--amber-dark); }
+  .alert.amber .alert-body { color: #6B4500; }
+  .alert.green { background: var(--green-light); border-color: var(--green); }
+  .alert.green .alert-title { color: var(--green-dark); }
+  .alert.green .alert-body { color: #1D5030; }
+  .alert.blue { background: var(--canyon-sky-light); border-color: var(--canyon-sky); }
+  .alert.blue .alert-title { color: var(--canyon-sky-dark); }
+  .alert.blue .alert-body { color: #234F6E; }
+  .alert.rust { background: var(--canyon-rust-light); border-color: var(--canyon-rust); }
+  .alert.rust .alert-title { color: var(--canyon-rust-dark); }
+  .alert.rust .alert-body { color: #6B2E14; }
+
+  /* ── Verify banner ── */
+  .verify-strip {
+    background: var(--amber-light);
+    border: 1px solid rgba(176,106,0,0.25);
+    border-radius: var(--radius);
+    padding: 0.8rem 1rem;
+    margin: 0 1.25rem 0;
+    font-size: 13px;
+    color: var(--amber-dark);
+    line-height: 1.5;
+  }
+  .verify-strip strong { color: var(--amber-dark); font-weight: 600; }
+  .verify-strip a { color: var(--amber-dark); }
+
+  /* ── Stat cards ── */
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.9rem 1rem;
+  }
+  .stat-label { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .stat-val { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
+  .stat-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  /* ── Schedule table ── */
+  .sched-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .sched-item { display: grid; grid-template-columns: 72px 1fr; border-bottom: 1px solid var(--border); }
+  .sched-item:last-child { border-bottom: none; }
+  .sched-time {
+    background: rgba(196,82,42,0.06);
+    padding: 10px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--canyon-rust-dark);
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    padding-top: 12px;
+  }
+  .sched-body { padding: 10px 12px; }
+  .sched-wp { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .sched-note { font-size: 12px; color: var(--text-mid); line-height: 1.5; }
+  .sched-warn { font-size: 12px; color: var(--red-dark); background: var(--red-light); border-radius: 4px; padding: 3px 7px; display: inline-block; margin-top: 4px; font-weight: 500; }
+  .sched-good { font-size: 12px; color: var(--green-dark); background: var(--green-light); border-radius: 4px; padding: 3px 7px; display: inline-block; margin-top: 4px; font-weight: 500; }
+
+  /* ── Water table ── */
+  .water-list { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .water-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--border); gap: 12px; }
+  .water-row:last-child { border-bottom: none; }
+  .water-loc { font-size: 13px; color: var(--text); flex: 1; }
+  .water-mi { font-size: 12px; color: var(--text-muted); min-width: 52px; text-align: right; flex-shrink: 0; }
+  .badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .b-on { background: var(--green-light); color: var(--green-dark); }
+  .b-off { background: var(--red-light); color: var(--red-dark); }
+  .b-filter { background: var(--canyon-sky-light); color: var(--canyon-sky-dark); }
+  .b-buy { background: var(--amber-light); color: var(--amber-dark); }
+
+  /* ── Protocol rows ── */
+  .proto-list { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .proto-row { display: flex; align-items: flex-start; gap: 12px; padding: 11px 14px; border-bottom: 1px solid var(--border); }
+  .proto-row:last-child { border-bottom: none; }
+  .proto-key { font-size: 12px; font-weight: 600; color: var(--canyon-stone); min-width: 110px; flex-shrink: 0; padding-top: 1px; line-height: 1.4; }
+  .proto-val { font-size: 13px; color: var(--text); line-height: 1.5; }
+
+  /* ── Food rows ── */
+  .food-list { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .food-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .food-row:last-child { border-bottom: none; }
+  .food-item { font-size: 13px; color: var(--text); flex: 1; line-height: 1.4; }
+  .food-tag { font-size: 11px; color: var(--text-muted); white-space: nowrap; flex-shrink: 0; }
+
+  /* ── Heat illness cards ── */
+  .illness-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .illness-header {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .illness-name { font-size: 14px; font-weight: 700; }
+  .illness-level { font-size: 11px; font-weight: 600; margin-top: 1px; }
+  .illness-card.amber .illness-header { background: var(--amber-light); }
+  .illness-card.amber .illness-name { color: var(--amber-dark); }
+  .illness-card.amber .illness-level { color: var(--amber); }
+  .illness-card.red .illness-header { background: var(--red-light); }
+  .illness-card.red .illness-name { color: var(--red-dark); }
+  .illness-card.red .illness-level { color: var(--red); }
+  .illness-card.blue .illness-header { background: var(--canyon-sky-light); }
+  .illness-card.blue .illness-name { color: var(--canyon-sky-dark); }
+  .illness-card.blue .illness-level { color: var(--canyon-sky); }
+  .illness-card.rust .illness-header { background: var(--canyon-rust-light); }
+  .illness-card.rust .illness-name { color: var(--canyon-rust-dark); }
+  .illness-card.rust .illness-level { color: var(--canyon-rust); }
+  .illness-body { padding: 10px 14px; }
+  .illness-row { font-size: 13px; color: var(--text-mid); line-height: 1.5; margin-bottom: 6px; }
+  .illness-row:last-child { margin-bottom: 0; }
+  .illness-row strong { color: var(--text); font-weight: 600; }
+
+  /* ── Checklist ── */
+  .cl-cat { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--canyon-stone); margin: 1.25rem 0 0.4rem; }
+  .cl { list-style: none; padding: 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .cl li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+    cursor: pointer;
+    transition: background 0.1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .cl li:last-child { border-bottom: none; }
+  .cl li.done { color: var(--text-muted); }
+  .cl li.done .cl-text { text-decoration: line-through; }
+  .cl-check {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--border-mid);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .cl li.done .cl-check {
+    background: var(--green);
+    border-color: var(--green);
+  }
+  .cl-check svg { display: none; }
+  .cl li.done .cl-check svg { display: block; }
+  .cl-note { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  /* ── Segment rows (overview) ── */
+  .seg-list { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .seg-row { display: flex; align-items: flex-start; gap: 12px; padding: 11px 14px; border-bottom: 1px solid var(--border); }
+  .seg-row:last-child { border-bottom: none; }
+  .seg-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--canyon-rust); flex-shrink: 0; margin-top: 6px; }
+  .seg-key { font-size: 12px; font-weight: 600; color: var(--text-mid); min-width: 120px; flex-shrink: 0; padding-top: 1px; }
+  .seg-val { font-size: 13px; color: var(--text); line-height: 1.5; }
+
+  /* ── Note text ── */
+  .note { font-size: 12px; color: var(--text-muted); margin-top: 8px; line-height: 1.55; padding: 0 2px; }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 2rem 1.25rem 3rem;
+    font-size: 12px;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  .footer a { color: var(--canyon-rust); }
+
+  /* ── Mobile tweaks ── */
+  @media (max-width: 400px) {
+    .stat-val { font-size: 19px; }
+    .header-title { font-size: 18px; }
+    .sched-time { font-size: 11px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+
+  [data-theme="dark"] {
+    --bg: #1A1208;
+    --surface: #251C12;
+    --text: #F5EFE6;
+    --text-mid: #C8BFB3;
+    --text-muted: #8A7E72;
+    --border: rgba(200,170,130,0.12);
+    --border-mid: rgba(200,170,130,0.25);
+    --canyon-sand: #1A1208;
+    --canyon-rust-light: #3A1E0E;
+    --canyon-rust-dark: #F09060;
+    --canyon-sky-light: #0E1E2E;
+    --canyon-sky-dark: #80C0F0;
+    --green-light: #0A1E12;
+    --green-dark: #60C090;
+    --amber-light: #1E1200;
+    --amber-dark: #E0A030;
+    --red-light: #200808;
+    --red-dark: #F08080;
+  }
+  [data-theme="dark"] .header { background: #100C06; }
+  [data-theme="dark"] .nav-scroll { background: #100C06; }
+  [data-theme="dark"] .sched-time { background: rgba(196,82,42,0.15); }
+  [data-theme="dark"] .alert.red .alert-body { color: #E08080; }
+  [data-theme="dark"] .alert.amber .alert-body { color: #D09040; }
+  [data-theme="dark"] .alert.green .alert-body { color: #60C090; }
+  [data-theme="dark"] .alert.blue .alert-body { color: #80C0F0; }
+  [data-theme="dark"] .alert.rust .alert-body { color: #E09060; }
+  [data-theme="dark"] .illness-card.amber .illness-name { color: #E0A030; }
+  [data-theme="dark"] .illness-card.red .illness-name { color: #F08080; }
+  [data-theme="dark"] .illness-card.blue .illness-name { color: #80C0F0; }
+  [data-theme="dark"] .illness-card.rust .illness-name { color: #F09060; }
+  [data-theme="dark"] .illness-row strong { color: var(--text); }
+  [data-theme="dark"] .cl-check { border-color: rgba(200,170,130,0.35); }
+  [data-theme="dark"] .verify-strip { background: #1E1200; border-color: rgba(176,106,0,0.3); color: #E0A030; }
+  [data-theme="dark"] .verify-strip strong, [data-theme="dark"] .verify-strip a { color: #E0A030; }
+
+  .theme-toggle {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    color: rgba(255,255,255,0.85);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 12px 4px 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+    transition: background 0.15s;
+    font-family: inherit;
+  }
+  .theme-toggle:hover { background: rgba(255,255,255,0.2); }
+  .theme-toggle-icon { font-size: 14px; line-height: 1; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+    <div>
+      <div class="header-eyebrow">Hike plan</div>
+      <div class="header-title">Grand Canyon — Rim to Rim</div>
+      <div class="header-sub">July 18–19, 2026 &nbsp;·&nbsp; North Kaibab → Phantom Ranch → Bright Angel</div>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn" aria-label="Toggle light/dark mode">
+      <span class="theme-toggle-icon" id="theme-icon">🌙</span>
+      <span id="theme-label">Dark</span>
+    </button>
+  </div>
+</div>
+
+<div class="nav-scroll">
+  <div class="nav-tabs" role="tablist">
+    <button class="nav-tab active" onclick="showPage('alerts', this)" role="tab">Alerts</button>
+    <button class="nav-tab" onclick="showPage('overview', this)" role="tab">Overview</button>
+    <button class="nav-tab" onclick="showPage('water', this)" role="tab">Water</button>
+    <button class="nav-tab" onclick="showPage('d0', this)" role="tab">July 17</button>
+    <button class="nav-tab" onclick="showPage('d1', this)" role="tab">Day 1</button>
+    <button class="nav-tab" onclick="showPage('d2', this)" role="tab">Day 2</button>
+    <button class="nav-tab" onclick="showPage('hydration', this)" role="tab">Food + hydration</button>
+    <button class="nav-tab" onclick="showPage('eatschedule', this)" role="tab">Eat schedule</button>
+    <button class="nav-tab" onclick="showPage('health', this)" role="tab">Heat illness</button>
+    <button class="nav-tab" onclick="showPage('gear', this)" role="tab">Gear</button>
+  </div>
+</div>
+
+<div style="padding: 0.75rem 1.25rem 0; max-width: 680px; margin: 0 auto;">
+  <div class="verify-strip">
+    <strong>Verify before July 18:</strong> Check <a href="https://www.nps.gov/grca/planyourvisit/key-messages.htm">nps.gov/grca key-messages</a> on July 14–15 to confirm Silver Bridge and River Trail are open. If closed, your Day 2 exit changes to South Kaibab — no water, no shade, 7 miles to the rim.
+  </div>
+</div>
+
+<!-- ALERTS -->
+<div id="page-alerts" class="page active">
+  <div class="section">
+    <div class="section-label">Safety — read first</div>
+
+    <div class="alert red">
+      <div class="alert-title">No water at North Rim or Supai Tunnel</div>
+      <div class="alert-body">Confirmed by NPS as of June 3, 2026. First potable water is Manzanita Rest Area (~3 mi in). Carry minimum 2L per person from your hotel before boarding the shuttle. Do not count on anything at the trailhead.</div>
+    </div>
+
+    <div class="alert red">
+      <div class="alert-title">Elevated flash flood risk — Dragon Bravo burn scar</div>
+      <div class="alert-body">July is peak monsoon season. The 2025 wildfire burn scar dramatically accelerates runoff along the upper North Kaibab — a storm you can't see can send debris and water down the drainage with almost no warning. Register for GCRIVERALERTS before you go. If storms are forecast on the Kaibab Plateau the morning of your hike, shelter at Cottonwood and wait.</div>
+    </div>
+
+    <div class="alert red">
+      <div class="alert-title">Rockfall and widow-maker hazard — upper North Kaibab</div>
+      <div class="alert-body">The burn scar between the trailhead and Supai Tunnel (~first 1.7 mi) has active rockfall and falling tree hazard. NPS guidance: move steadily and limit breaks in this zone. Do not stop under standing dead trees. Avoid the section during high winds.</div>
+    </div>
+
+    <div class="alert amber">
+      <div class="alert-title">Silver Bridge and River Trail — verify before July 18</div>
+      <div class="alert-body">Current NPS closure runs through June 30, 2026. If it reopens on schedule, your Bright Angel exit is unaffected. If the closure slips again, your only exit from Phantom Ranch to the South Rim is South Kaibab Trail — steeper, no water, no shade, 7 miles on tired legs.</div>
+    </div>
+
+    <div class="alert amber">
+      <div class="alert-title">Cottonwood — use the campground tap, not the day use area</div>
+      <div class="alert-body">NPS confirmed the day use area tap at Cottonwood is off. Walk to the campground side to refill. Water statuses across all stations can change suddenly due to pipeline breaks — always carry your filter.</div>
+    </div>
+
+    <div class="alert green">
+      <div class="alert-title">North Kaibab Trail fully open</div>
+      <div class="alert-body">Entire trail from North Rim trailhead to Phantom Ranch confirmed open as of May 15, 2026. Foot traffic only; stock use suspended for the season. Expect possible brief delays near maintenance crews.</div>
+    </div>
+
+    <div class="alert green">
+      <div class="alert-title">Bright Angel Trail water confirmed on</div>
+      <div class="alert-body">Havasupai Gardens, 3-Mile Resthouse, 1.5-Mile Resthouse, and Bright Angel Trailhead all confirmed on as of June 3, 2026. Day 2 is well-supplied.</div>
+    </div>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<div id="page-overview" class="page">
+  <div class="section">
+    <div class="section-label">Trip at a glance</div>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-label">Day 1 distance</div>
+        <div class="stat-val">~12.3 mi</div>
+        <div class="stat-sub">−5,760 ft elevation</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Day 2 distance</div>
+        <div class="stat-val">~10.4 mi</div>
+        <div class="stat-sub">+4,380 ft elevation</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Start elevation</div>
+        <div class="stat-val">8,241 ft</div>
+        <div class="stat-sub">North Kaibab Trailhead</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Low point</div>
+        <div class="stat-val">~2,480 ft</div>
+        <div class="stat-sub">Phantom Ranch / Colorado River</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Day 1 key segments</div>
+    <div class="seg-list">
+      <div class="seg-row"><div class="seg-dot"></div><div class="seg-key">TH → Manzanita</div><div class="seg-val">~3.0 mi through Dragon Bravo burn scar. Move steadily — rockfall and falling tree hazard. First water at Manzanita.</div></div>
+      <div class="seg-row"><div class="seg-dot"></div><div class="seg-key">Manzanita → Cottonwood</div><div class="seg-val">~3.8 mi into Roaring Springs Canyon. More shade, trail improves. Water at Roaring Springs and Cottonwood campground.</div></div>
+      <div class="seg-row"><div class="seg-dot"></div><div class="seg-key">The Box</div><div class="seg-val">~4 mi of narrow canyon from Cottonwood toward Phantom. Walls trap heat — regularly 110°F+ midday in July. Goal: through The Box before 11:30am.</div></div>
+      <div class="seg-row"><div class="seg-dot"></div><div class="seg-key">Ribbon Falls detour</div><div class="seg-val">~0.3 mi off trail. Non-negotiable stop. Soak yourselves completely — clothes, hat, hair. Evaporative cooling carries you to Phantom.</div></div>
+      <div class="seg-row"><div class="seg-dot"></div><div class="seg-key">Ribbon Falls → Phantom</div><div class="seg-val">~1.7 mi to finish. Canteen, food, cold drinks, Bright Angel Creek for soaking. Rest for the afternoon.</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Day 2 key segments</div>
+    <div class="seg-list">
+      <div class="seg-row"><div class="seg-dot"></div><div class="seg-key">Phantom → Black Bridge</div><div class="seg-val">~0.9 mi flat to cross the Colorado River. Even at 3am it will be ~85–90°F at river level. Start sipping immediately.</div></div>
+      <div class="seg-row"><div class="seg-dot"></div><div class="seg-key">Bridge → Havasupai Gardens</div><div class="seg-val">~3.6 mi, mostly flat. Water and full rest stop at Havasupai Gardens before the serious climbing begins.</div></div>
+      <div class="seg-row"><div class="seg-dot"></div><div class="seg-key">Havasupai Gardens → rim</div><div class="seg-val">~5 mi, 3,000+ ft gain, steep switchbacks. Shorten your stride deliberately. Your legs have already carried 12 miles of descent from yesterday.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- WATER -->
+<div id="page-water" class="page">
+  <div class="section">
+    <div class="section-label">Day 1 — North Kaibab water sources</div>
+    <div class="water-list">
+      <div class="water-row"><div class="water-loc">North Kaibab Trailhead</div><div class="water-mi">0 mi</div><span class="badge b-off">Off</span></div>
+      <div class="water-row"><div class="water-loc">Supai Tunnel</div><div class="water-mi">~1.7 mi</div><span class="badge b-off">Off</span></div>
+      <div class="water-row"><div class="water-loc">Manzanita Rest Area</div><div class="water-mi">~3.0 mi</div><span class="badge b-on">On ✓</span></div>
+      <div class="water-row"><div class="water-loc">Roaring Springs</div><div class="water-mi">~5.0 mi</div><span class="badge b-on">On ✓</span></div>
+      <div class="water-row"><div class="water-loc">Cottonwood — campground tap</div><div class="water-mi">~6.8 mi</div><span class="badge b-on">On ✓</span></div>
+      <div class="water-row"><div class="water-loc">Cottonwood — day use area tap</div><div class="water-mi">~6.8 mi</div><span class="badge b-off">Off</span></div>
+      <div class="water-row"><div class="water-loc">Bright Angel Creek (The Box)</div><div class="water-mi">~7–12 mi</div><span class="badge b-filter">Filter</span></div>
+      <div class="water-row"><div class="water-loc">Phantom Ranch</div><div class="water-mi">~12 mi</div><span class="badge b-on">On ✓</span></div>
+    </div>
+    <p class="note">Each person should carry a minimum of 3L out of the hotel on Day 1 — the first potable water is 3 miles in at Manzanita. A hydration bladder plus one or two Smartwater bottles is the recommended setup. At Cottonwood, walk to the campground — the day use tap is confirmed off. Never leave a water source with less than a full load.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Day 2 — Bright Angel water sources</div>
+    <div class="water-list">
+      <div class="water-row"><div class="water-loc">Phantom Ranch — fill before departing</div><div class="water-mi">0 mi</div><span class="badge b-on">On ✓</span></div>
+      <div class="water-row"><div class="water-loc">Havasupai Gardens</div><div class="water-mi">~4.5 mi</div><span class="badge b-on">On ✓</span></div>
+      <div class="water-row"><div class="water-loc">3-Mile Resthouse</div><div class="water-mi">~6.5 mi</div><span class="badge b-on">On ✓</span></div>
+      <div class="water-row"><div class="water-loc">1.5-Mile Resthouse</div><div class="water-mi">~8.0 mi</div><span class="badge b-on">On ✓</span></div>
+      <div class="water-row"><div class="water-loc">Bright Angel Trailhead</div><div class="water-mi">~9.5 mi</div><span class="badge b-on">On ✓</span></div>
+    </div>
+    <p class="note">Day 2 is well-supplied throughout. Water availability doesn't reduce heat risk — drink and eat on a schedule regardless.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">North Rim — purchase water here</div>
+    <div class="alert amber">
+      <div class="alert-title">Buy bottled water at the North Rim General Store</div>
+      <div class="alert-body">If your hotel doesn't fully cover your carry load, the General Store is open 9am–4pm daily and sells bottled water. The shuttle drops you at the trailhead at ~4:30am — top up at your hotel the night before, not the morning of.</div>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 0 -->
+<div id="page-d0" class="page">
+  <div class="section">
+    <div class="section-label">July 17 — pre-hike day</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:0.85rem">How you spend this day meaningfully affects both hike days. Arrive pre-loaded on sodium and carbs, pack finished, and in bed early.</p>
+    <div class="sched-wrap">
+      <div class="sched-item">
+        <div class="sched-time">All day</div>
+        <div class="sched-body">
+          <div class="sched-wp">Hydrate steadily throughout the day</div>
+          <div class="sched-note">Aim for pale yellow urine — not clear, not dark. Add electrolytes to 2–3 water servings spread across the day, not dumped in at night. Pre-loading sodium now means you start Day 1 ahead.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">All day</div>
+        <div class="sched-body">
+          <div class="sched-wp">No alcohol</div>
+          <div class="sched-note">Even one drink is a meaningful dehydration tax when you're hiking in 110°F canyon heat the next morning. Full stop.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">Dinner</div>
+        <div class="sched-body">
+          <div class="sched-wp">Carb-forward meal</div>
+          <div class="sched-note">Pasta, rice, or potatoes. Nothing exotic, nothing that could upset your stomach overnight.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">Evening</div>
+        <div class="sched-body">
+          <div class="sched-wp">Salty snack before bed</div>
+          <div class="sched-note">Pretzels, salted nuts, or crackers. Intentional sodium pre-loading the night before a high-sweat day.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">Evening</div>
+        <div class="sched-body">
+          <div class="sched-wp">Finish packing — fill all water</div>
+          <div class="sched-note">Fill every water vessel from the hotel tap tonight. Morning is eat, dress, and get on the shuttle. Nothing to figure out at 2:30am.</div>
+          <span class="sched-warn">Trim toenails if you haven't — the 5,760 ft descent will punish long nails</span>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">Early</div>
+        <div class="sched-body">
+          <div class="sched-wp">Sleep</div>
+          <div class="sched-note">You're waking up at ~2:30am. Get to bed as early as you realistically can. Nothing useful happens after 9pm.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 1 -->
+<div id="page-d1" class="page">
+  <div class="section">
+    <div class="section-label">July 18 — North Kaibab to Phantom Ranch (~12.3 mi, −5,760 ft)</div>
+    <div class="alert red" style="margin-bottom:0.75rem">
+      <div class="alert-title">Move fast through the burn scar — first 1.7 miles</div>
+      <div class="alert-body">NPS warning: active rockfall, falling trees, and debris flow hazard between the trailhead and Supai Tunnel. Travel quickly, limit breaks, do not stop under dead standing trees. Watch overhead at all times in this zone.</div>
+    </div>
+    <div class="sched-wrap">
+      <div class="sched-item">
+        <div class="sched-time">~2:30am</div>
+        <div class="sched-body">
+          <div class="sched-wp">Wake up at hotel</div>
+          <div class="sched-note">Eat 400–500 cal: oatmeal, eggs, bagel with peanut butter — whatever sits well with you. Take first electrolyte dose. Confirm every bottle is full before the shuttle.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">4:30am</div>
+        <div class="sched-body">
+          <div class="sched-wp">North Kaibab Trailhead — 8,241 ft</div>
+          <div class="sched-note">Start immediately. Fully dark — headlamps on. Temp ~50–60°F at this elevation. No water available here.</div>
+          <span class="sched-warn">Enter burn scar zone — stay moving, watch overhead</span>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~5:15am</div>
+        <div class="sched-body">
+          <div class="sched-wp">Supai Tunnel — ~1.7 mi</div>
+          <div class="sched-note">Short break. No water here. You've cleared the burn scar hazard zone. Eat a snack.</div>
+          <span class="sched-good">Burn scar zone cleared</span>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~6:00am</div>
+        <div class="sched-body">
+          <div class="sched-wp">Manzanita Rest Area — ~3.0 mi</div>
+          <div class="sched-note">First water. Drink 0.5–1L on the spot before refilling everything. Eat something here. This is a real psychological milestone — you've covered the exposed section.</div>
+          <span class="sched-good">First water — fill everything</span>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~7:15am</div>
+        <div class="sched-body">
+          <div class="sched-wp">Roaring Springs — ~5.0 mi</div>
+          <div class="sched-note">Water. Take a longer break here — beautiful spot and your last truly comfortable stop before the trail flattens and heats up. Eat real food.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~8:30am</div>
+        <div class="sched-body">
+          <div class="sched-wp">Cottonwood Campground — ~6.8 mi</div>
+          <div class="sched-note">Water at campground tap (not day use area — that tap is off). Fill everything. Wet down neck gaiters. Deploy the umbrella from here forward — The Box begins.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">8:30–9:30am</div>
+        <div class="sched-body">
+          <div class="sched-wp">Mandatory rest at Cottonwood</div>
+          <div class="sched-note">Get fully off trail. Find shade. Soak feet in the creek if accessible. Eat a real meal. The goal is to be through The Box before 11:30am — this rest stop is what makes that possible.</div>
+          <span class="sched-warn">The Box begins here — 110°F+ midday</span>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~9:30am</div>
+        <div class="sched-body">
+          <div class="sched-wp">Depart Cottonwood — enter The Box</div>
+          <div class="sched-note">Slow, consistent pace. Umbrella up. Wet neck gaiter every 20–30 min at Bright Angel Creek. Sip electrolyte water constantly. Don't stop for long breaks in direct sun.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~11:00am</div>
+        <div class="sched-body">
+          <div class="sched-wp">Ribbon Falls junction — detour</div>
+          <div class="sched-note">Take the ~0.3 mi detour. Soak yourselves completely — clothes, hat, hair, everything. Evaporative cooling lasts 20–30 min and carries you the rest of the way to Phantom.</div>
+          <span class="sched-good">Soak here — non-negotiable</span>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~12:30–1pm</div>
+        <div class="sched-body">
+          <div class="sched-wp">Phantom Ranch</div>
+          <div class="sched-note">Check in. Canteen for food and cold drinks. Soak in Bright Angel Creek as long as you want. Rest in shade. Protect legs from sun even at rest. You are completely done for the day.</div>
+          <span class="sched-good">Done — rest, eat, soak</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 2 -->
+<div id="page-d2" class="page">
+  <div class="section">
+    <div class="section-label">July 19 — Phantom Ranch to South Rim (~10.4 mi, +4,380 ft)</div>
+    <div class="alert blue" style="margin-bottom:0.75rem">
+      <div class="alert-title">The 3am start is not optional</div>
+      <div class="alert-body">NPS advises avoiding the canyon between 10am–4pm in summer. A 3am start puts you on the rim by ~8am. The upper Bright Angel switchbacks are steep and fully exposed — the sun hits them fast once it clears the canyon walls. You want to be done before that happens.</div>
+    </div>
+    <div class="sched-wrap">
+      <div class="sched-item">
+        <div class="sched-time">~2:00am</div>
+        <div class="sched-body">
+          <div class="sched-wp">Wake up at Phantom Ranch</div>
+          <div class="sched-note">Eat. Drink electrolytes. Fill every water vessel before you leave — next water is 4.5 miles away at Havasupai Gardens. Don't skip this step in the dark.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">3:00am</div>
+        <div class="sched-body">
+          <div class="sched-wp">Depart Phantom Ranch</div>
+          <div class="sched-note">Headlamps on. Flat ~0.9 mi walk to Black Bridge — cross the Colorado River. Even at 3am it's ~85–90°F at river level. Start sipping water immediately.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~4:30am</div>
+        <div class="sched-body">
+          <div class="sched-wp">Havasupai Gardens — ~4.5 mi</div>
+          <div class="sched-note">Water and restrooms. Plan a 20–30 min stop. Eat real food here — this is your last full rest before the serious climbing. It's getting light by now. Fill everything.</div>
+          <span class="sched-warn">Serious climbing begins above here</span>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~5:30am</div>
+        <div class="sched-body">
+          <div class="sched-wp">3-Mile Resthouse — ~6.5 mi</div>
+          <div class="sched-note">Water. Short rest. Shorten your stride now — short quick steps burn less energy than long strides on steep grade. The switchbacks above here are the toughest climbing on the whole trip.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~6:30am</div>
+        <div class="sched-body">
+          <div class="sched-wp">1.5-Mile Resthouse — ~8.0 mi</div>
+          <div class="sched-note">Water and emergency phone. Take honest stock of how you both feel. The final 1.5 miles is the steepest section of the entire hike — steady beats fast every time here.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~7:30–8am</div>
+        <div class="sched-body">
+          <div class="sched-wp">South Rim Trailhead</div>
+          <div class="sched-note">Done. Eat something immediately. Your ride is waiting. You hiked the Grand Canyon rim to rim in July.</div>
+          <span class="sched-good">You made it</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HYDRATION + FOOD -->
+<div id="page-hydration" class="page">
+  <div class="section">
+    <div class="section-label">The core rule</div>
+    <div class="alert red">
+      <div class="alert-title">Every time you drink, you also eat or take electrolytes</div>
+      <div class="alert-body">Hyponatremia — dangerously low blood sodium from drinking too much plain water — kills canyon hikers and looks identical to dehydration. Never drink plain water exclusively for more than one consecutive stop. Alternate electrolyte water and plain water.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Hydration protocol</div>
+    <div class="proto-list">
+      <div class="proto-row"><div class="proto-key">While moving</div><div class="proto-val">Drink 0.5L every 30–45 min. Sip continuously — never chug. At each water source drink 0.5–1L on the spot before refilling bottles.</div></div>
+      <div class="proto-row"><div class="proto-key">Electrolyte timing</div><div class="proto-val">Supplement every 60–90 min while moving. Carry 12 total servings across both days.</div></div>
+      <div class="proto-row"><div class="proto-key">Best pick — heavy sweaters</div><div class="proto-val">LMNT — highest sodium of any mainstream product. Single-serve stick packs. This is the call for someone who sweats a lot.</div></div>
+      <div class="proto-row"><div class="proto-key">Backup / alternate</div><div class="proto-val">Nuun Sport tabs — dissolve in a bottle, light to carry. 1–2 tubes.</div></div>
+      <div class="proto-row"><div class="proto-key">Appetite suppressed</div><div class="proto-val">Liquid IV — adds carbohydrates alongside electrolytes when you can't stomach solid food in the heat.</div></div>
+      <div class="proto-row"><div class="proto-key">Day 0 pre-loading</div><div class="proto-val">Electrolytes in 2–3 water servings throughout the day before — spread across the whole day, not just the evening.</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Food — eat on a schedule, not when hungry</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:0.75rem">Heat suppresses appetite. If you wait until you're hungry in July canyon heat, you're already behind. Eat something at every stop regardless of appetite.</p>
+    <div class="food-list">
+      <div class="food-row"><div class="food-item">Salty snacks: pretzels, salted nuts, Chomps beef sticks, crackers</div><div class="food-tag">Sodium priority</div></div>
+      <div class="food-row"><div class="food-item">Energy bars: Honey Stinger Waffles, Clif Bars, RX Bars</div><div class="food-tag">Check sodium content</div></div>
+      <div class="food-row"><div class="food-item">Energy gels: Gu or Maurten — 8 total across both days</div><div class="food-tag">The Box + upper BA</div></div>
+      <div class="food-row"><div class="food-item">Tortilla with peanut butter</div><div class="food-tag">Fat + carbs + salt</div></div>
+      <div class="food-row"><div class="food-item">Day 0 dinner: pasta, rice, or potatoes</div><div class="food-tag">Night before</div></div>
+      <div class="food-row"><div class="food-item">Day 1 morning: 400–500 cal before shuttle</div><div class="food-tag">Oatmeal, eggs, bagel + PB</div></div>
+    </div>
+    <p class="note">The NPS recommends eating double your normal caloric intake for summer canyon hikes. Calories play a direct role in regulating body temperature.</p>
+  </div>
+</div>
+
+<!-- EAT SCHEDULE -->
+<div id="page-eatschedule" class="page">
+  <div class="section">
+    <div class="section-label">How to use this schedule</div>
+    <div class="alert rust">
+      <div class="alert-title">Eat on a clock, not on hunger</div>
+      <div class="alert-body">Heat kills appetite well before it kills performance. By the time you feel hungry in the canyon in July, you're already behind. Use this schedule as a timer — eat something at every stop regardless of how you feel.</div>
+    </div>
+    <div class="alert blue">
+      <div class="alert-title">Every eating stop is also an electrolyte stop</div>
+      <div class="alert-body">Never eat dry salty snacks with plain water. Every food stop pairs with either an electrolyte drink (LMNT or Nuun in your bottle) or a gel that contains sodium. This is how you prevent both bonking and hyponatremia simultaneously.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Day 0 — July 17 (pre-load day)</div>
+    <div class="sched-wrap">
+      <div class="sched-item">
+        <div class="sched-time">Morning</div>
+        <div class="sched-body">
+          <div class="sched-wp">Normal breakfast + first electrolytes</div>
+          <div class="sched-note">Eat your usual breakfast. Add one LMNT or Nuun to your morning water. This is the start of your sodium pre-load — not the evening before, now.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">Midday</div>
+        <div class="sched-body">
+          <div class="sched-wp">Normal lunch + electrolytes in water</div>
+          <div class="sched-note">Keep drinking steadily. Add another electrolyte serving to your water with lunch. Eat a carb-forward meal — pasta salad, rice bowl, sandwich on bread.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">Dinner</div>
+        <div class="sched-body">
+          <div class="sched-wp">Carb-heavy dinner + electrolytes</div>
+          <div class="sched-note">Pasta, rice, potatoes. A large portion — you want your glycogen stores topped off. Third electrolyte serving of the day with dinner or after.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">Before bed</div>
+        <div class="sched-body">
+          <div class="sched-wp">Salty snack</div>
+          <div class="sched-note">Pretzels, salted nuts, or crackers. This is intentional sodium pre-loading — eat it even if you're not hungry. It matters tomorrow.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Day 1 — July 18 (North Kaibab, ~12.3 mi)</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:0.75rem">Target ~200–300 cal and one electrolyte serving per hour while moving. Total carry food per person: ~1,800–2,200 cal.</p>
+    <div class="sched-wrap">
+      <div class="sched-item">
+        <div class="sched-time">~2:30am</div>
+        <div class="sched-body">
+          <div class="sched-wp">Pre-hike breakfast — 400–500 cal</div>
+          <div class="sched-note">Oatmeal with peanut butter and banana, eggs + toast, or a bagel with peanut butter. Real food, not a bar. Eat with one LMNT or Nuun in your water. This is your fuel for the first 3 miles.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~5:15am</div>
+        <div class="sched-body">
+          <div class="sched-wp">Supai Tunnel — ~1.7 mi — quick snack</div>
+          <div class="sched-note">One energy bar or a handful of salted nuts + pretzels. ~150–200 cal. Keep it brief — you're still in the burn scar hazard zone. Switch to electrolyte water here if you've been drinking plain.</div>
+          <span class="sched-good">Electrolyte water on from here</span>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~6:00am</div>
+        <div class="sched-body">
+          <div class="sched-wp">Manzanita — ~3.0 mi — snack + electrolytes</div>
+          <div class="sched-note">Drink 0.5–1L on the spot (electrolyte mix). Eat a Honey Stinger waffle or Clif Bar (~200 cal). This is your first real refuel after the exposed opening miles. Refill all vessels before leaving.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~7:15am</div>
+        <div class="sched-body">
+          <div class="sched-wp">Roaring Springs — ~5.0 mi — real food stop</div>
+          <div class="sched-note">Longer break. Eat a tortilla with peanut butter or a substantial bar (~300 cal). One more electrolyte serving. This is your last comfortable eating stop before things heat up — don't rush it.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~8:30am</div>
+        <div class="sched-body">
+          <div class="sched-wp">Cottonwood — ~6.8 mi — full meal</div>
+          <div class="sched-note">Eat your biggest stop of the day here during the mandatory rest. ~400 cal: tortilla with peanut butter, a substantial bar, beef sticks, crackers, whatever sounds tolerable. Electrolyte water the whole time. This fuels you through The Box.</div>
+          <span class="sched-warn">The Box starts here — fuel up now</span>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">In The Box</div>
+        <div class="sched-body">
+          <div class="sched-wp">~9:30am–11:00am — gels only, no stopping</div>
+          <div class="sched-note">Don't stop for food in The Box during peak heat. Take one gel every 45 min while moving — Gu or Maurten with sodium. Sip electrolyte water between gels. If appetite is gone entirely, Liquid IV in your bottle adds calories without eating.</div>
+          <span class="sched-warn">No solid food stops — gels + electrolytes only</span>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~11:00am</div>
+        <div class="sched-body">
+          <div class="sched-wp">Ribbon Falls — soak + small snack</div>
+          <div class="sched-note">You're almost to Phantom. Eat something small if you can stomach it — a gel or a few crackers. Mostly just soak and cool down here. Phantom Ranch is 1.7 miles away.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~1:00pm</div>
+        <div class="sched-body">
+          <div class="sched-wp">Phantom Ranch — full meal at the canteen</div>
+          <div class="sched-note">Eat a real hot meal at the canteen. Drink steadily through the afternoon — electrolytes in the first few liters, then plain water as the evening cools. Eat again at dinner. Your goal overnight is to top off glycogen and sodium for the climb tomorrow.</div>
+          <span class="sched-good">Canteen serves lemonade, snacks, and hot meals</span>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">Evening</div>
+        <div class="sched-body">
+          <div class="sched-wp">Phantom Ranch dinner + salty snack before bed</div>
+          <div class="sched-note">Same logic as Day 0 — carbs at dinner, salty snack before sleep. One electrolyte serving before bed. Wake up at 2am with your glycogen stores full.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Day 2 — July 19 (Bright Angel, ~10.4 mi)</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:0.75rem">The climb is harder than the descent on tired legs. Eating here is mostly about sustaining energy through the upper switchbacks — don't let the shorter distance fool you into under-fueling.</p>
+    <div class="sched-wrap">
+      <div class="sched-item">
+        <div class="sched-time">~2:00am</div>
+        <div class="sched-body">
+          <div class="sched-wp">Pre-climb meal — 300–400 cal</div>
+          <div class="sched-note">Whatever you can stomach at 2am. A bar, peanut butter crackers, oatmeal if Phantom has it. One LMNT in your water before you leave. Even 300 cal is better than nothing — your body needs fuel for 4,380 ft of climbing.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~4:30am</div>
+        <div class="sched-body">
+          <div class="sched-wp">Havasupai Gardens — ~4.5 mi — full rest + real food</div>
+          <div class="sched-note">This is the most important eating stop on Day 2. Eat ~300–400 cal here: a bar, tortilla with peanut butter, salted nuts. One electrolyte serving. The serious climbing begins above here — you need fuel in your system before it starts, not after.</div>
+          <span class="sched-warn">Eat here before the hard climbing starts</span>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~5:30am</div>
+        <div class="sched-body">
+          <div class="sched-wp">3-Mile Resthouse — gel + electrolytes</div>
+          <div class="sched-note">One gel (~100 cal) and electrolyte water. Keep it quick — you want to maintain momentum and stay ahead of the sun. The switchbacks above here are steep; keep blood sugar steady.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~6:30am</div>
+        <div class="sched-body">
+          <div class="sched-wp">1.5-Mile Resthouse — final gel</div>
+          <div class="sched-note">One last gel. You're 1.5 miles from the rim. Drink the rest of your electrolyte water. Short break, honest check on how you both feel, then finish strong.</div>
+        </div>
+      </div>
+      <div class="sched-item">
+        <div class="sched-time">~7:30–8am</div>
+        <div class="sched-body">
+          <div class="sched-wp">South Rim — eat immediately</div>
+          <div class="sched-note">Eat a real meal as soon as you reach the rim. Your body has been in deficit for two days. Salt, carbs, protein — whatever sounds good. You've earned it.</div>
+          <span class="sched-good">Done</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Carry food reference — per person, both days</div>
+    <div class="proto-list">
+      <div class="proto-row"><div class="proto-key">Energy gels</div><div class="proto-val">8 total — Gu or Maurten with sodium. Primary fuel for The Box and upper Bright Angel switchbacks when solid food is hard to stomach.</div></div>
+      <div class="proto-row"><div class="proto-key">Energy bars</div><div class="proto-val">4–5 bars — Honey Stinger Waffles, Clif Bars, or RX Bars. Check sodium content; avoid pure-sugar bars.</div></div>
+      <div class="proto-row"><div class="proto-key">Salty snacks</div><div class="proto-val">A generous handful's worth at each planned stop — pretzels, salted nuts, Chomps beef sticks, crackers. Sodium is the priority, not just calories.</div></div>
+      <div class="proto-row"><div class="proto-key">Tortilla + PB</div><div class="proto-val">1–2 per day. Flat, durable, calorie-dense, salty. The best real food option for canyon heat.</div></div>
+      <div class="proto-row"><div class="proto-key">Electrolytes</div><div class="proto-val">12 servings total across both days — LMNT preferred for heavy sweaters, Nuun Sport as backup. One serving roughly every 60–90 min while moving.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- HEAT ILLNESS -->
+<div id="page-health" class="page">
+  <div class="section">
+    <div class="section-label">Know these before you start</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:0.75rem">Ranger stations with emergency capability: Cottonwood Camp, Phantom Ranch, Havasupai Gardens, 1.5-Mile Resthouse, 3-Mile Resthouse.</p>
+
+    <div class="illness-card amber">
+      <div class="illness-header">
+        <div class="illness-name">Heat exhaustion</div>
+        <div class="illness-level">Warning level — act now before it becomes a medical emergency</div>
+      </div>
+      <div class="illness-body">
+        <div class="illness-row"><strong>Signs:</strong> heavy sweating, weakness, cold or clammy skin, nausea, headache, dizziness</div>
+        <div class="illness-row"><strong>Action:</strong> Stop immediately. Get in shade. Drink electrolytes. Wet the skin. Rest until you feel genuinely better — this can take an hour or more.</div>
+        <div class="illness-row"><strong>Do not:</strong> Push through. This is the last warning your body gives before heat stroke.</div>
+      </div>
+    </div>
+
+    <div class="illness-card red">
+      <div class="illness-header">
+        <div class="illness-name">Heat stroke</div>
+        <div class="illness-level">Medical emergency — call for help immediately</div>
+      </div>
+      <div class="illness-body">
+        <div class="illness-row"><strong>Signs:</strong> hot, red, dry skin; confusion; rapid pulse; loss of coherence or responsiveness</div>
+        <div class="illness-row"><strong>Action:</strong> Stop moving immediately. Cool the body aggressively with water. Send someone for help — do not leave the person alone. Ranger stations are at Cottonwood, Phantom Ranch, Havasupai Gardens, 1.5-Mile and 3-Mile Resthouses.</div>
+        <div class="illness-row">A helicopter rescue costs $10,000+ and puts rescuers at risk. Heat stroke is preventable.</div>
+      </div>
+    </div>
+
+    <div class="illness-card blue">
+      <div class="illness-header">
+        <div class="illness-name">Hyponatremia</div>
+        <div class="illness-level">Too much plain water, not enough salt — looks like dehydration</div>
+      </div>
+      <div class="illness-body">
+        <div class="illness-row"><strong>Signs:</strong> headache, nausea, confusion, swelling in hands or feet — mimics dehydration exactly</div>
+        <div class="illness-row"><strong>Action:</strong> Stop drinking water. Eat salty food immediately. Rest in shade.</div>
+        <div class="illness-row"><strong>Prevention:</strong> Electrolytes every 60–90 min while hiking. Salty snacks at every stop. Never drink plain water exclusively for more than one stop in a row.</div>
+      </div>
+    </div>
+
+    <div class="illness-card rust">
+      <div class="illness-header">
+        <div class="illness-name">Flash flood</div>
+        <div class="illness-level">Elevated risk in 2026 — Dragon Bravo burn scar</div>
+      </div>
+      <div class="illness-body">
+        <div class="illness-row"><strong>Risk:</strong> Can occur with no visible storm overhead. The burned watershed channels water with almost no absorption — a distant storm means fast-rising water in the drainage.</div>
+        <div class="illness-row"><strong>Signs:</strong> Roaring noise upstream, sudden rise in creek color or volume, smell of mud</div>
+        <div class="illness-row"><strong>Action:</strong> Move to high ground immediately. Face upstream when near the creek. Do not re-enter the drainage until the all-clear. Register for GCRIVERALERTS before your trip.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">The rule neither of you can break</div>
+    <div class="alert blue">
+      <div class="alert-title">If one person says stop, you both stop</div>
+      <div class="alert-body">Agree on this before you start. Canyon fatalities routinely involve someone who felt off but kept moving because they didn't want to slow down their partner. The canyon will still be there. If either of you shows signs of heat illness and does not recover within an hour of rest, shade, and electrolytes — call for help rather than push on.</div>
+    </div>
+  </div>
+</div>
+
+<!-- GEAR -->
+<div id="page-gear" class="page">
+  <div class="section">
+    <div class="section-label">What to buy before July 18</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:0.5rem">Tap any item to mark it done.</p>
+
+    <div class="cl-cat">Water — highest priority</div>
+    <ul class="cl" id="cl-water">
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Sawyer Squeeze water filter</div><div class="cl-note">Screws directly onto a standard Smartwater bottle — no dedicated bladder needed. Backflush with the included syringe before the trip if bought ahead of time. ~$30–35 at REI or Amazon.</div></div></li>
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">2x 1L Smartwater bottles per person</div><div class="cl-note">Pairs perfectly with the Sawyer Squeeze — threads fit directly. Use one as your dirty-water collection vessel for filtering creek water in The Box. Combined with a hydration bladder, target 3–4L total carry capacity per person.</div></div></li>
+    </ul>
+
+    <div class="cl-cat">Electrolytes and nutrition</div>
+    <ul class="cl">
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">LMNT electrolyte packs — 12 total for both days</div><div class="cl-note">Best option for heavy sweaters. Highest sodium of any mainstream product.</div></div></li>
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Nuun Sport tablets — 1–2 tubes as backup</div><div class="cl-note">Light, dissolvable, easy to carry as a secondary option.</div></div></li>
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Energy gels — 8 total (Gu or Maurten)</div><div class="cl-note">For The Box and upper Bright Angel when solid food feels impossible in the heat.</div></div></li>
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Salty carry food: pretzels, salted nuts, Chomps, tortillas + PB</div><div class="cl-note">Sodium is as important as calories. Prioritize salty over sweet.</div></div></li>
+    </ul>
+
+    <div class="cl-cat">Cooling and clothing</div>
+    <ul class="cl">
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Compact UPF 50 umbrella (Repel or Chrome Dome)</div><div class="cl-note">Cuts radiant heat dramatically in The Box. Sounds odd, genuinely essential in 110°F canyon corridor. ~11 oz.</div></div></li>
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Buff / neck gaiter — 1 per person</div><div class="cl-note">Wet at every water source. Evaporative cooling lasts 20–30 min per soak.</div></div></li>
+
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Sunscreen SPF 50+</div><div class="cl-note">Apply before you start even in the dark. The sun hits exposed upper trail sections fast once it clears the canyon walls.</div></div></li>
+    </ul>
+
+    <div class="cl-cat">Stability and comfort</div>
+    <ul class="cl">
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Trekking poles — collapsible carbon fiber (Black Diamond or LEKI)</div><div class="cl-note">5,760 ft of descent on Day 1 will destroy your quads and knees without poles. Not optional.</div></div></li>
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Leukotape or moleskin for blisters</div><div class="cl-note">Leukotape stays on in sweaty conditions far better than moleskin. Apply at the first hint of hot spots, not after.</div></div></li>
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Ibuprofen and acetaminophen</div><div class="cl-note">Alternate for joint and muscle pain. Both in an accessible pocket, not buried in the pack.</div></div></li>
+    </ul>
+
+    <div class="cl-cat">Safety</div>
+    <ul class="cl">
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Emergency whistle — clipped to shoulder strap</div><div class="cl-note">Weighs nothing. Carries further than a voice in canyon acoustics.</div></div></li>
+
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">1 headlamp per person + 1 shared backup</div><div class="cl-note">Fresh batteries or fully charged the night before. You are starting both days in complete darkness.</div></div></li>
+    </ul>
+
+    <div class="cl-cat">Pre-trip admin</div>
+    <ul class="cl">
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Register for GCRIVERALERTS</div><div class="cl-note">gcriveralerts.com — flash flood and evacuation alerts for the inner canyon. Non-optional in 2026 given the burn scar risk.</div></div></li>
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Verify Silver Bridge and River Trail open — check July 14–15</div><div class="cl-note">nps.gov/grca/planyourvisit/key-messages.htm — confirm closure lifted after June 30, 2026.</div></div></li>
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Tell someone your full itinerary and check-in plan</div><div class="cl-note">Name, contact, and what to do if you're overdue. Share this document with them.</div></div></li>
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Trim toenails a few days before the trip</div><div class="cl-note">5,760 ft of descent punishes long toenails. Do this several days before, not the morning of.</div></div></li>
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Check NPS trail alerts the week of your trip</div><div class="cl-note">nps.gov/grca/planyourvisit/key-messages.htm — water status changes frequently due to pipeline breaks.</div></div></li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  NPS data current as of June 3, 2026.<br>
+  Always verify current conditions at <a href="https://www.nps.gov/grca/planyourvisit/key-messages.htm">nps.gov/grca</a> before your hike.<br><br>
+  Grand Canyon National Park: 928-638-7888<br>
+  Emergency: 911
+</div>
+
+<script>
+  function showPage(id, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    btn.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function toggle(el) {
+    el.classList.toggle('done');
+  }
+
+  function applyTheme(dark) {
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    document.getElementById('theme-icon').textContent = dark ? '☀️' : '🌙';
+    document.getElementById('theme-label').textContent = dark ? 'Light' : 'Dark';
+  }
+
+  function toggleTheme() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    applyTheme(!isDark);
+    try { localStorage.setItem('r2r-theme', !isDark ? 'dark' : 'light'); } catch(e) {}
+  }
+
+  (function() {
+    let saved = null;
+    try { saved = localStorage.getItem('r2r-theme'); } catch(e) {}
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(saved ? saved === 'dark' : prefersDark);
+  })();
+</script>
+</body>
+</html>
