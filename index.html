@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Grand Canyon Rim to Rim hike plan — July 18–19, 2026. North Kaibab to Bright Angel via Phantom Ranch.">
+<meta name="theme-color" content="#2C1F14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GC R2R">
+<link rel="manifest" href="manifest.json">
 <title>Grand Canyon R2R — July 18–19, 2026</title>
 <style>
   :root {
@@ -342,6 +347,91 @@
   @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; }
   }
+  /* ── Alarm UI ── */
+  .alarm-setup-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px;
+    background: var(--canyon-rust);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    margin-bottom: 1rem;
+    transition: background 0.15s;
+  }
+  .alarm-setup-btn:hover { background: var(--canyon-rust-dark); }
+  .alarm-setup-btn:disabled { background: var(--canyon-stone); cursor: default; }
+
+  .alarm-day-tabs { display: flex; gap: 6px; margin-bottom: 1rem; }
+  .alarm-day-tab {
+    flex: 1;
+    padding: 8px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-mid);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .alarm-day-tab.active {
+    background: var(--canyon-dusk);
+    color: #fff;
+    border-color: var(--canyon-dusk);
+  }
+  [data-theme="dark"] .alarm-day-tab.active { background: var(--canyon-rust); border-color: var(--canyon-rust); }
+
+  .alarm-list { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1rem; }
+  .alarm-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .alarm-row:last-child { border-bottom: none; }
+  .alarm-row.fired { background: var(--green-light); }
+  .alarm-row.fired .alarm-label { text-decoration: line-through; color: var(--text-muted); }
+  .alarm-time-col { font-size: 13px; font-weight: 700; color: var(--canyon-rust); min-width: 58px; flex-shrink: 0; }
+  .alarm-label { font-size: 13px; color: var(--text); flex: 1; line-height: 1.4; }
+  .alarm-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .alarm-check {
+    width: 22px; height: 22px;
+    border: 2px solid var(--border-mid);
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .alarm-row.fired .alarm-check { background: var(--green); border-color: var(--green); }
+  .alarm-check svg { display: none; }
+  .alarm-row.fired .alarm-check svg { display: block; }
+
+  .notif-status {
+    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+  }
+  .notif-status.granted { background: var(--green-light); color: var(--green-dark); }
+  .notif-status.denied { background: var(--red-light); color: var(--red-dark); }
+  .notif-status.pending { background: var(--amber-light); color: var(--amber-dark); }
+  .notif-status.unsupported { background: var(--border); color: var(--text-muted); }
+
+  .alarm-note { font-size: 12px; color: var(--text-muted); line-height: 1.55; margin-top: 8px; padding: 0 2px; }
 
   [data-theme="dark"] {
     --bg: #1A1208;
@@ -433,7 +523,7 @@
 
 <div style="padding: 0.75rem 1.25rem 0; max-width: 680px; margin: 0 auto;">
   <div class="verify-strip">
-    <strong>Verify before July 18:</strong> Check <a href="https://www.nps.gov/grca/planyourvisit/key-messages.htm">nps.gov/grca key-messages</a> on July 14–15 to confirm Silver Bridge and River Trail are open. If closed, your Day 2 exit changes to South Kaibab — no water, no shade, 7 miles to the rim.
+    <strong>Verify before July 18:</strong> Silver Bridge and River Trail closure is on track to lift June 30 — confirmed still scheduled as of June 27, 2026. Check <a href="https://www.nps.gov/grca/planyourvisit/key-messages.htm">nps.gov/grca key-messages</a> on July 14–15 to confirm. If closed, your Day 2 exit changes to South Kaibab — no water, no shade, 7 miles to the rim.
   </div>
 </div>
 
@@ -470,6 +560,16 @@
     <div class="alert green">
       <div class="alert-title">North Kaibab Trail fully open</div>
       <div class="alert-body">Entire trail from North Rim trailhead to Phantom Ranch confirmed open as of May 15, 2026. Foot traffic only; stock use suspended for the season. Expect possible brief delays near maintenance crews.</div>
+    </div>
+
+    <div class="alert amber">
+      <div class="alert-title">Pipeline breaks — uneven trail surface near Phantom Ranch</div>
+      <div class="alert-body">Recent Transcanyon pipeline breaks have created upheaved trail sections and water bubblers near Phantom Ranch. Relevant on Day 2 — you're departing at 3am by headlamp. Watch your footing on the trail between Phantom Ranch and Black Bridge.</div>
+    </div>
+
+    <div class="alert amber">
+      <div class="alert-title">Flash flood risk at Phantom Ranch — not just the upper canyon</div>
+      <div class="alert-body">NPS specifically flags that flash flooding can occur along the lower North Kaibab Trail and in the Phantom Ranch area with little to no warning, even when storms are not visible overhead. Stay alert to posted forecasts and instructions from park staff. Be prepared to move to higher ground immediately if an evacuation is issued.</div>
     </div>
 
     <div class="alert green">
@@ -729,6 +829,7 @@
         <div class="sched-body">
           <div class="sched-wp">Depart Phantom Ranch</div>
           <div class="sched-note">Headlamps on. Flat ~0.9 mi walk to Black Bridge — cross the Colorado River. Even at 3am it's ~85–90°F at river level. Start sipping water immediately.</div>
+          <span class="sched-warn">Watch footing — pipeline breaks have created upheaved trail sections near Phantom</span>
         </div>
       </div>
       <div class="sched-item">
@@ -969,6 +1070,144 @@
   </div>
 
   <div class="section">
+    <div class="section-label">Alarms — tap to set &amp; track</div>
+    <div id="notif-status" class="notif-status pending">Tap the button below to enable notifications. Alarms will fire even when your screen is off — only works when added to your home screen from the GitHub Pages link.</div>
+    <button class="alarm-setup-btn" id="notif-btn" onclick="requestNotifPermission()">
+      🔔 Enable Alarm Notifications
+    </button>
+    <div class="alarm-day-tabs">
+      <button class="alarm-day-tab active" onclick="showAlarmDay('d1-alarms', this)">Day 1 — July 18</button>
+      <button class="alarm-day-tab" onclick="showAlarmDay('d2-alarms', this)">Day 2 — July 19</button>
+    </div>
+
+    <div id="d1-alarms">
+      <div class="alarm-list">
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-0', 'Wake up — eat breakfast + electrolytes')">
+          <div class="alarm-time-col">2:30am</div>
+          <div><div class="alarm-label">Wake up — eat breakfast + electrolytes</div><div class="alarm-sub">400–500 cal + first LMNT of the day</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-1', 'Start hiking — begin sipping water')">
+          <div class="alarm-time-col">4:30am</div>
+          <div><div class="alarm-label">Start hiking — begin sipping water</div><div class="alarm-sub">Headlamps on. Move fast through burn scar.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-2', 'Supai Tunnel — eat snack, check water')">
+          <div class="alarm-time-col">5:15am</div>
+          <div><div class="alarm-label">Supai Tunnel — eat snack, check water</div><div class="alarm-sub">Burn scar zone cleared. Bar or handful of nuts.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-3', 'Manzanita — drink 1L, refill, eat')">
+          <div class="alarm-time-col">6:00am</div>
+          <div><div class="alarm-label">Manzanita — drink 1L on the spot, refill, eat</div><div class="alarm-sub">First water source. Fill everything before leaving.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-4', 'Add electrolytes to bottle now')">
+          <div class="alarm-time-col">6:45am</div>
+          <div><div class="alarm-label">Add electrolytes to bottle now</div><div class="alarm-sub">LMNT or Nuun — don't skip this one</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-5', 'Roaring Springs — eat real food, refill')">
+          <div class="alarm-time-col">7:15am</div>
+          <div><div class="alarm-label">Roaring Springs — eat real food, refill</div><div class="alarm-sub">Tortilla + PB or substantial bar. Longer break.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-6', 'Add electrolytes to bottle now')">
+          <div class="alarm-time-col">8:00am</div>
+          <div><div class="alarm-label">Add electrolytes to bottle now</div><div class="alarm-sub">LMNT or Nuun</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-7', 'Cottonwood — full meal, campground tap only')">
+          <div class="alarm-time-col">8:30am</div>
+          <div><div class="alarm-label">Cottonwood — full meal, campground tap only</div><div class="alarm-sub">Biggest eating stop of Day 1. Fuel up for The Box.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-8', 'Depart Cottonwood — umbrella up, gaiter wet')">
+          <div class="alarm-time-col">9:30am</div>
+          <div><div class="alarm-label">Depart Cottonwood — umbrella up, gaiter wet</div><div class="alarm-sub">The Box begins. Gels only from here — no solid food stops.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-9', 'Gel #1 + electrolytes — keep moving')">
+          <div class="alarm-time-col">10:00am</div>
+          <div><div class="alarm-label">Gel #1 + electrolytes — keep moving</div><div class="alarm-sub">GU gel + sip electrolyte water. Wet gaiter.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-10', 'Gel #2 — keep moving')">
+          <div class="alarm-time-col">10:45am</div>
+          <div><div class="alarm-label">Gel #2 — keep moving</div><div class="alarm-sub">GU gel. Sip water. Ribbon Falls coming up soon.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-11', 'Ribbon Falls — take the detour, soak completely')">
+          <div class="alarm-time-col">11:00am</div>
+          <div><div class="alarm-label">Ribbon Falls — take the detour, soak completely</div><div class="alarm-sub">Clothes, hat, hair — everything wet. Phantom is 1.7 mi away.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-12', 'Dinner at Phantom Ranch — carbs + electrolytes')">
+          <div class="alarm-time-col">7:00pm</div>
+          <div><div class="alarm-label">Dinner at Phantom Ranch — carbs + electrolytes</div><div class="alarm-sub">Load up for tomorrow's climb.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-13', 'Salty snack before bed + electrolytes')">
+          <div class="alarm-time-col">9:00pm</div>
+          <div><div class="alarm-label">Salty snack before bed + electrolytes</div><div class="alarm-sub">Pre-load sodium for the climb. Lights out by 9:30.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="d2-alarms" style="display:none">
+      <div class="alarm-list">
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd2-0', 'Wake up — eat + fill all water vessels')">
+          <div class="alarm-time-col">2:00am</div>
+          <div><div class="alarm-label">Wake up — eat + fill all water vessels</div><div class="alarm-sub">300–400 cal. LMNT in your bottle. Fill everything.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd2-1', 'Start climbing — sip water, watch footing')">
+          <div class="alarm-time-col">3:00am</div>
+          <div><div class="alarm-label">Start climbing — sip water, watch footing</div><div class="alarm-sub">Headlamps on. Pipeline breaks = uneven trail near Phantom.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd2-2', 'Add electrolytes to bottle now')">
+          <div class="alarm-time-col">3:45am</div>
+          <div><div class="alarm-label">Add electrolytes to bottle now</div><div class="alarm-sub">LMNT or Nuun. Keep sipping.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd2-3', 'Havasupai Gardens — eat full meal, refill water')">
+          <div class="alarm-time-col">4:30am</div>
+          <div><div class="alarm-label">Havasupai Gardens — eat full meal, refill water</div><div class="alarm-sub">Most important eating stop of Day 2. Hard climbing starts above here.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd2-4', 'Gel #1 + electrolytes')">
+          <div class="alarm-time-col">5:15am</div>
+          <div><div class="alarm-label">Gel #1 + electrolytes</div><div class="alarm-sub">GU gel + electrolyte sip. Shorten your stride on switchbacks.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd2-5', '3-Mile Resthouse — gel, short rest, refill')">
+          <div class="alarm-time-col">5:30am</div>
+          <div><div class="alarm-label">3-Mile Resthouse — gel, short rest, refill</div><div class="alarm-sub">Water here. Keep it brief — stay ahead of the sun.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd2-6', 'Gel #2 + electrolytes')">
+          <div class="alarm-time-col">6:15am</div>
+          <div><div class="alarm-label">Gel #2 + electrolytes</div><div class="alarm-sub">GU gel. Final hard push above here.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd2-7', '1.5-Mile Resthouse — final gel, honest check-in')">
+          <div class="alarm-time-col">6:30am</div>
+          <div><div class="alarm-label">1.5-Mile Resthouse — final gel, honest check-in</div><div class="alarm-sub">1.5 miles to rim. How do you both feel? Steady beats fast.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="alarm-row" onclick="toggleAlarm(this, 'd2-8', 'South Rim — eat immediately, you're done!')">
+          <div class="alarm-time-col">7:30am</div>
+          <div><div class="alarm-label">South Rim — eat immediately, you're done!</div><div class="alarm-sub">Salt, carbs, protein. You earned it.</div></div>
+          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+    </div>
+    <p class="alarm-note">Tap any alarm to mark it done on the trail. Notifications fire at the scheduled time — your phone must be added to your home screen from the GitHub Pages link for background alerts to work. Alarms fire on the correct date automatically (July 18 for Day 1, July 19 for Day 2).</p>
+  </div>
+
+  <div class="section">
     <div class="section-label">Carry food reference — per person, both days</div>
     <div class="proto-list">
       <div class="proto-row"><div class="proto-key">Energy gels</div><div class="proto-val">8 total — Gu or Maurten with sodium. Primary fuel for The Box and upper Bright Angel switchbacks when solid food is hard to stomach.</div></div>
@@ -1052,38 +1291,38 @@
 
     <div class="cl-cat">Water — highest priority</div>
     <ul class="cl" id="cl-water">
-      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Sawyer Squeeze water filter</div><div class="cl-note">Screws directly onto a standard Smartwater bottle — no dedicated bladder needed. Backflush with the included syringe before the trip if bought ahead of time. ~$30–35 at REI or Amazon.</div></div></li>
+      <li onclick="toggle(this)" class="done"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Sawyer Squeeze water filter</div><div class="cl-note">Screws directly onto a standard Smartwater bottle — no dedicated bladder needed. Backflush with the included syringe before the trip if bought ahead of time. ~$30–35 at REI or Amazon.</div></div></li>
       <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">2x 1L Smartwater bottles per person</div><div class="cl-note">Pairs perfectly with the Sawyer Squeeze — threads fit directly. Use one as your dirty-water collection vessel for filtering creek water in The Box. Combined with a hydration bladder, target 3–4L total carry capacity per person.</div></div></li>
     </ul>
 
     <div class="cl-cat">Electrolytes and nutrition</div>
     <ul class="cl">
       <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">LMNT electrolyte packs — 12 total for both days</div><div class="cl-note">Best option for heavy sweaters. Highest sodium of any mainstream product.</div></div></li>
-      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Nuun Sport tablets — 1–2 tubes as backup</div><div class="cl-note">Light, dissolvable, easy to carry as a secondary option.</div></div></li>
-      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Energy gels — 8 total (Gu or Maurten)</div><div class="cl-note">For The Box and upper Bright Angel when solid food feels impossible in the heat.</div></div></li>
+      <li onclick="toggle(this)" class="done"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Nuun Sport tablets — 1–2 tubes as backup</div><div class="cl-note">Light, dissolvable, easy to carry as a secondary option.</div></div></li>
+      <li onclick="toggle(this)" class="done"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Energy gels — 8 total (Gu or Maurten)</div><div class="cl-note">For The Box and upper Bright Angel when solid food feels impossible in the heat.</div></div></li>
       <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Salty carry food: pretzels, salted nuts, Chomps, tortillas + PB</div><div class="cl-note">Sodium is as important as calories. Prioritize salty over sweet.</div></div></li>
     </ul>
 
     <div class="cl-cat">Cooling and clothing</div>
     <ul class="cl">
-      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Compact UPF 50 umbrella (Repel or Chrome Dome)</div><div class="cl-note">Cuts radiant heat dramatically in The Box. Sounds odd, genuinely essential in 110°F canyon corridor. ~11 oz.</div></div></li>
-      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Buff / neck gaiter — 1 per person</div><div class="cl-note">Wet at every water source. Evaporative cooling lasts 20–30 min per soak.</div></div></li>
+      <li onclick="toggle(this)" class="done"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Compact UPF 50 umbrella (Repel or Chrome Dome)</div><div class="cl-note">Cuts radiant heat dramatically in The Box. Sounds odd, genuinely essential in 110°F canyon corridor. ~11 oz.</div></div></li>
+      <li onclick="toggle(this)" class="done"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Buff / neck gaiter — 1 per person</div><div class="cl-note">Wet at every water source. Evaporative cooling lasts 20–30 min per soak.</div></div></li>
 
       <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Sunscreen SPF 50+</div><div class="cl-note">Apply before you start even in the dark. The sun hits exposed upper trail sections fast once it clears the canyon walls.</div></div></li>
     </ul>
 
     <div class="cl-cat">Stability and comfort</div>
     <ul class="cl">
-      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Trekking poles — collapsible carbon fiber (Black Diamond or LEKI)</div><div class="cl-note">5,760 ft of descent on Day 1 will destroy your quads and knees without poles. Not optional.</div></div></li>
+      <li onclick="toggle(this)" class="done"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Trekking poles — collapsible carbon fiber (Black Diamond or LEKI)</div><div class="cl-note">5,760 ft of descent on Day 1 will destroy your quads and knees without poles. Not optional.</div></div></li>
       <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Leukotape or moleskin for blisters</div><div class="cl-note">Leukotape stays on in sweaty conditions far better than moleskin. Apply at the first hint of hot spots, not after.</div></div></li>
       <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Ibuprofen and acetaminophen</div><div class="cl-note">Alternate for joint and muscle pain. Both in an accessible pocket, not buried in the pack.</div></div></li>
     </ul>
 
     <div class="cl-cat">Safety</div>
     <ul class="cl">
-      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Emergency whistle — clipped to shoulder strap</div><div class="cl-note">Weighs nothing. Carries further than a voice in canyon acoustics.</div></div></li>
+      <li onclick="toggle(this)" class="done"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Emergency whistle — clipped to shoulder strap</div><div class="cl-note">Weighs nothing. Carries further than a voice in canyon acoustics.</div></div></li>
 
-      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">1 headlamp per person + 1 shared backup</div><div class="cl-note">Fresh batteries or fully charged the night before. You are starting both days in complete darkness.</div></div></li>
+      <li onclick="toggle(this)" class="done"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">1 headlamp per person + 1 shared backup</div><div class="cl-note">Fresh batteries or fully charged the night before. You are starting both days in complete darkness.</div></div></li>
     </ul>
 
     <div class="cl-cat">Pre-trip admin</div>
@@ -1098,13 +1337,14 @@
 </div>
 
 <div class="footer">
-  NPS data current as of June 3, 2026.<br>
+  NPS trail and water status last verified June 27, 2026.<br>
   Always verify current conditions at <a href="https://www.nps.gov/grca/planyourvisit/key-messages.htm">nps.gov/grca</a> before your hike.<br><br>
   Grand Canyon National Park: 928-638-7888<br>
   Emergency: 911
 </div>
 
 <script>
+  // ── Navigation ──
   function showPage(id, btn) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -1113,28 +1353,145 @@
     window.scrollTo(0, 0);
   }
 
+  // ── Gear checklist toggle ──
   function toggle(el) {
     el.classList.toggle('done');
   }
 
+  // ── Theme toggle ──
   function applyTheme(dark) {
     document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
     document.getElementById('theme-icon').textContent = dark ? '☀️' : '🌙';
     document.getElementById('theme-label').textContent = dark ? 'Light' : 'Dark';
   }
-
   function toggleTheme() {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     applyTheme(!isDark);
     try { localStorage.setItem('r2r-theme', !isDark ? 'dark' : 'light'); } catch(e) {}
   }
-
   (function() {
     let saved = null;
     try { saved = localStorage.getItem('r2r-theme'); } catch(e) {}
     const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     applyTheme(saved ? saved === 'dark' : prefersDark);
   })();
+
+  // ── Alarm day tabs ──
+  function showAlarmDay(id, btn) {
+    document.getElementById('d1-alarms').style.display = 'none';
+    document.getElementById('d2-alarms').style.display = 'none';
+    document.getElementById(id).style.display = 'block';
+    document.querySelectorAll('.alarm-day-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // ── Alarm toggle (tap to mark done) ──
+  function toggleAlarm(el, id, label) {
+    el.classList.toggle('fired');
+    try { localStorage.setItem('alarm-' + id, el.classList.contains('fired') ? '1' : '0'); } catch(e) {}
+  }
+
+  // ── Notification permission ──
+  function updateNotifUI() {
+    const btn = document.getElementById('notif-btn');
+    const status = document.getElementById('notif-status');
+    if (!('Notification' in window)) {
+      status.className = 'notif-status unsupported';
+      status.textContent = 'Notifications not supported in this browser. Add to home screen from Safari (iOS) or Chrome (Android) for notification support.';
+      btn.style.display = 'none';
+      return;
+    }
+    if (Notification.permission === 'granted') {
+      status.className = 'notif-status granted';
+      status.textContent = '✓ Notifications enabled — alarms will fire at the scheduled times on July 18 and 19.';
+      btn.textContent = '✓ Notifications Active';
+      btn.disabled = true;
+    } else if (Notification.permission === 'denied') {
+      status.className = 'notif-status denied';
+      status.textContent = 'Notifications blocked. Go to your phone Settings → Safari/Chrome → Notifications and allow this site, then reload.';
+      btn.style.display = 'none';
+    } else {
+      status.className = 'notif-status pending';
+      status.textContent = 'Tap the button to enable alarm notifications. Must be added to home screen from the GitHub Pages link for background alerts.';
+    }
+  }
+
+  async function requestNotifPermission() {
+    if (!('Notification' in window)) { updateNotifUI(); return; }
+    const result = await Notification.requestPermission();
+    updateNotifUI();
+    if (result === 'granted') {
+      scheduleAllAlarms();
+    }
+  }
+
+  // ── Schedule all alarms via service worker ──
+  const ALARMS = {
+    // Day 1 — July 18, 2026
+    'd1-0':  { date: '2026-07-18', time: '02:30', label: 'Wake up — eat breakfast + electrolytes', body: '400–500 cal + first LMNT of the day' },
+    'd1-1':  { date: '2026-07-18', time: '04:30', label: 'Start hiking — begin sipping water', body: 'Headlamps on. Move fast through burn scar.' },
+    'd1-2':  { date: '2026-07-18', time: '05:15', label: 'Supai Tunnel — eat snack, check water', body: 'Bar or handful of nuts. Burn scar cleared.' },
+    'd1-3':  { date: '2026-07-18', time: '06:00', label: 'Manzanita — drink 1L, refill, eat', body: 'First water source. Fill everything before leaving.' },
+    'd1-4':  { date: '2026-07-18', time: '06:45', label: 'Add electrolytes to bottle now', body: 'LMNT or Nuun — don't skip this one' },
+    'd1-5':  { date: '2026-07-18', time: '07:15', label: 'Roaring Springs — eat real food, refill', body: 'Tortilla + PB or substantial bar.' },
+    'd1-6':  { date: '2026-07-18', time: '08:00', label: 'Add electrolytes to bottle now', body: 'LMNT or Nuun' },
+    'd1-7':  { date: '2026-07-18', time: '08:30', label: 'Cottonwood — full meal, campground tap only', body: 'Biggest eating stop of Day 1. Fuel up for The Box.' },
+    'd1-8':  { date: '2026-07-18', time: '09:30', label: 'Depart Cottonwood — umbrella up, gaiter wet', body: 'The Box begins. Gels only from here.' },
+    'd1-9':  { date: '2026-07-18', time: '10:00', label: 'Gel #1 + electrolytes — keep moving', body: 'GU gel + sip electrolyte water. Wet gaiter.' },
+    'd1-10': { date: '2026-07-18', time: '10:45', label: 'Gel #2 — keep moving', body: 'GU gel. Ribbon Falls coming up soon.' },
+    'd1-11': { date: '2026-07-18', time: '11:00', label: 'Ribbon Falls — soak completely!', body: 'Clothes, hat, hair — everything wet. Phantom is 1.7 mi away.' },
+    'd1-12': { date: '2026-07-18', time: '19:00', label: 'Dinner at Phantom Ranch — carbs + electrolytes', body: 'Load up for tomorrow's climb.' },
+    'd1-13': { date: '2026-07-18', time: '21:00', label: 'Salty snack before bed + electrolytes', body: 'Pre-load sodium. Lights out by 9:30.' },
+    // Day 2 — July 19, 2026
+    'd2-0':  { date: '2026-07-19', time: '02:00', label: 'Wake up — eat + fill all water vessels', body: '300–400 cal. LMNT in your bottle. Fill everything.' },
+    'd2-1':  { date: '2026-07-19', time: '03:00', label: 'Start climbing — sip water, watch footing', body: 'Pipeline breaks = uneven trail near Phantom.' },
+    'd2-2':  { date: '2026-07-19', time: '03:45', label: 'Add electrolytes to bottle now', body: 'LMNT or Nuun. Keep sipping.' },
+    'd2-3':  { date: '2026-07-19', time: '04:30', label: 'Havasupai Gardens — eat full meal, refill', body: 'Most important eating stop of Day 2.' },
+    'd2-4':  { date: '2026-07-19', time: '05:15', label: 'Gel #1 + electrolytes', body: 'GU gel. Shorten your stride on switchbacks.' },
+    'd2-5':  { date: '2026-07-19', time: '05:30', label: '3-Mile Resthouse — gel, short rest, refill', body: 'Water here. Keep it brief — stay ahead of the sun.' },
+    'd2-6':  { date: '2026-07-19', time: '06:15', label: 'Gel #2 + electrolytes', body: 'GU gel. Final hard push above here.' },
+    'd2-7':  { date: '2026-07-19', time: '06:30', label: '1.5-Mile Resthouse — final gel, honest check-in', body: '1.5 miles to rim. Steady beats fast.' },
+    'd2-8':  { date: '2026-07-19', time: '07:30', label: 'South Rim — eat immediately, you're done!', body: 'Salt, carbs, protein. You earned it.' },
+  };
+
+  async function scheduleAllAlarms() {
+    if (!('serviceWorker' in navigator) || !navigator.serviceWorker.controller) return;
+    for (const [id, alarm] of Object.entries(ALARMS)) {
+      const [h, m] = alarm.time.split(':').map(Number);
+      const dt = new Date(alarm.date + 'T' + alarm.time + ':00');
+      const now = new Date();
+      const delay = dt - now;
+      if (delay > 0) {
+        navigator.serviceWorker.controller.postMessage({
+          type: 'SCHEDULE_ALARM',
+          id, delay, label: alarm.label, body: alarm.body
+        });
+      }
+    }
+  }
+
+  // ── Service worker registration ──
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      console.log('SW registered');
+      updateNotifUI();
+      if (Notification.permission === 'granted') scheduleAllAlarms();
+    }).catch(() => updateNotifUI());
+  } else {
+    updateNotifUI();
+  }
+
+  // ── Restore alarm fired state from localStorage ──
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.alarm-row').forEach(row => {
+      const id = row.getAttribute('onclick').match(/'([^']+)'/)?.[1];
+      if (id) {
+        try {
+          if (localStorage.getItem('alarm-' + id) === '1') row.classList.add('fired');
+        } catch(e) {}
+      }
+    });
+  });
 </script>
 </body>
 </html>
