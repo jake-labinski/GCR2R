@@ -488,6 +488,80 @@
   }
   .theme-toggle:hover { background: rgba(255,255,255,0.2); }
   .theme-toggle-icon { font-size: 14px; line-height: 1; }
+  /* ── Trail Tracker ── */
+  .tracker-header {
+    background: var(--canyon-dusk);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+  .tracker-day-label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+  .tracker-countdown { font-size: 36px; font-weight: 700; letter-spacing: -1px; color: #fff; font-variant-numeric: tabular-nums; }
+  .tracker-countdown.urgent { color: #F08060; }
+  .tracker-countdown.done-all { color: #60C090; font-size: 24px; }
+  .tracker-next-label { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 3px; }
+  .tracker-next-name { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.9); margin-top: 2px; }
+
+  .tracker-day-tabs { display: flex; gap: 6px; margin-bottom: 1rem; }
+  .tracker-day-tab {
+    flex: 1; padding: 8px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-mid);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 13px; font-weight: 500;
+    cursor: pointer; font-family: inherit;
+    transition: all 0.15s;
+  }
+  .tracker-day-tab.active { background: var(--canyon-dusk); color: #fff; border-color: var(--canyon-dusk); }
+
+  .tracker-list { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1rem; }
+  .tracker-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.1s;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+  }
+  .tracker-row:last-child { border-bottom: none; }
+  .tracker-row.t-done { background: var(--green-light); }
+  .tracker-row.t-active { background: var(--amber-light); }
+  .tracker-row.t-done .t-label { text-decoration: line-through; color: var(--text-muted); }
+  .tracker-row.t-done .t-time { color: var(--text-muted); }
+  .t-time { font-size: 12px; font-weight: 700; color: var(--canyon-rust); min-width: 58px; flex-shrink: 0; }
+  .t-body { flex: 1; }
+  .t-label { font-size: 13px; color: var(--text); line-height: 1.4; font-weight: 500; }
+  .t-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+  .t-gap { font-size: 11px; color: var(--canyon-rust); font-weight: 600; margin-top: 3px; }
+  .t-check {
+    width: 24px; height: 24px;
+    border: 2px solid var(--border-mid);
+    border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .tracker-row.t-done .t-check { background: var(--green); border-color: var(--green); }
+  .tracker-row.t-active .t-check { border-color: var(--amber); }
+  .t-check svg { display: none; }
+  .tracker-row.t-done .t-check svg { display: block; }
+
+  .tracker-reset-btn {
+    width: 100%; padding: 10px;
+    background: transparent;
+    border: 1px solid var(--border-mid);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-size: 13px; cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .tracker-reset-btn:hover { background: var(--red-light); color: var(--red-dark); border-color: var(--red); }
+
+  .tracker-tip { font-size: 12px; color: var(--text-muted); line-height: 1.55; margin-bottom: 1rem; padding: 0 2px; }
+
 </style>
 </head>
 <body>
@@ -518,6 +592,7 @@
     <button class="nav-tab" onclick="showPage('eatschedule', this)" role="tab">Eat schedule</button>
     <button class="nav-tab" onclick="showPage('health', this)" role="tab">Heat illness</button>
     <button class="nav-tab" onclick="showPage('gear', this)" role="tab">Gear</button>
+    <button class="nav-tab" onclick="showPage('tracker', this)" role="tab">Trail tracker</button>
   </div>
 </div>
 
@@ -539,7 +614,7 @@
 
     <div class="alert red">
       <div class="alert-title">Elevated flash flood risk — Dragon Bravo burn scar</div>
-      <div class="alert-body">July is peak monsoon season. The 2025 wildfire burn scar dramatically accelerates runoff along the upper North Kaibab — a storm you can't see can send debris and water down the drainage with almost no warning. Register for GCRIVERALERTS before you go. If storms are forecast on the Kaibab Plateau the morning of your hike, shelter at Cottonwood and wait.</div>
+      <div class="alert-body">July is peak monsoon season. The 2025 wildfire burn scar dramatically accelerates runoff along the upper North Kaibab — a storm you can't see can send debris and water down the drainage with almost no warning. Register for GCRIVERALERTS before you go — text GCRIVERALERTS to 928-707-7842 and wait for a confirmation text back. If storms are forecast on the Kaibab Plateau the morning of your hike, shelter at Cottonwood and wait.</div>
     </div>
 
     <div class="alert red">
@@ -1070,144 +1145,6 @@
   </div>
 
   <div class="section">
-    <div class="section-label">Alarms — tap to set &amp; track</div>
-    <div id="notif-status" class="notif-status pending">Tap the button below to enable notifications. Alarms will fire even when your screen is off — only works when added to your home screen from the GitHub Pages link.</div>
-    <button class="alarm-setup-btn" id="notif-btn" onclick="requestNotifPermission()">
-      🔔 Enable Alarm Notifications
-    </button>
-    <div class="alarm-day-tabs">
-      <button class="alarm-day-tab active" onclick="showAlarmDay('d1-alarms', this)">Day 1 — July 18</button>
-      <button class="alarm-day-tab" onclick="showAlarmDay('d2-alarms', this)">Day 2 — July 19</button>
-    </div>
-
-    <div id="d1-alarms">
-      <div class="alarm-list">
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-0', 'Wake up — eat breakfast + electrolytes')">
-          <div class="alarm-time-col">2:30am</div>
-          <div><div class="alarm-label">Wake up — eat breakfast + electrolytes</div><div class="alarm-sub">400–500 cal + first LMNT of the day</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-1', 'Start hiking — begin sipping water')">
-          <div class="alarm-time-col">4:30am</div>
-          <div><div class="alarm-label">Start hiking — begin sipping water</div><div class="alarm-sub">Headlamps on. Move fast through burn scar.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-2', 'Supai Tunnel — eat snack, check water')">
-          <div class="alarm-time-col">5:15am</div>
-          <div><div class="alarm-label">Supai Tunnel — eat snack, check water</div><div class="alarm-sub">Burn scar zone cleared. Bar or handful of nuts.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-3', 'Manzanita — drink 1L, refill, eat')">
-          <div class="alarm-time-col">6:00am</div>
-          <div><div class="alarm-label">Manzanita — drink 1L on the spot, refill, eat</div><div class="alarm-sub">First water source. Fill everything before leaving.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-4', 'Add electrolytes to bottle now')">
-          <div class="alarm-time-col">6:45am</div>
-          <div><div class="alarm-label">Add electrolytes to bottle now</div><div class="alarm-sub">LMNT or Nuun — don't skip this one</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-5', 'Roaring Springs — eat real food, refill')">
-          <div class="alarm-time-col">7:15am</div>
-          <div><div class="alarm-label">Roaring Springs — eat real food, refill</div><div class="alarm-sub">Tortilla + PB or substantial bar. Longer break.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-6', 'Add electrolytes to bottle now')">
-          <div class="alarm-time-col">8:00am</div>
-          <div><div class="alarm-label">Add electrolytes to bottle now</div><div class="alarm-sub">LMNT or Nuun</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-7', 'Cottonwood — full meal, campground tap only')">
-          <div class="alarm-time-col">8:30am</div>
-          <div><div class="alarm-label">Cottonwood — full meal, campground tap only</div><div class="alarm-sub">Biggest eating stop of Day 1. Fuel up for The Box.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-8', 'Depart Cottonwood — umbrella up, gaiter wet')">
-          <div class="alarm-time-col">9:30am</div>
-          <div><div class="alarm-label">Depart Cottonwood — umbrella up, gaiter wet</div><div class="alarm-sub">The Box begins. Gels only from here — no solid food stops.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-9', 'Gel #1 + electrolytes — keep moving')">
-          <div class="alarm-time-col">10:00am</div>
-          <div><div class="alarm-label">Gel #1 + electrolytes — keep moving</div><div class="alarm-sub">GU gel + sip electrolyte water. Wet gaiter.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-10', 'Gel #2 — keep moving')">
-          <div class="alarm-time-col">10:45am</div>
-          <div><div class="alarm-label">Gel #2 — keep moving</div><div class="alarm-sub">GU gel. Sip water. Ribbon Falls coming up soon.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-11', 'Ribbon Falls — take the detour, soak completely')">
-          <div class="alarm-time-col">11:00am</div>
-          <div><div class="alarm-label">Ribbon Falls — take the detour, soak completely</div><div class="alarm-sub">Clothes, hat, hair — everything wet. Phantom is 1.7 mi away.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-12', 'Dinner at Phantom Ranch — carbs + electrolytes')">
-          <div class="alarm-time-col">7:00pm</div>
-          <div><div class="alarm-label">Dinner at Phantom Ranch — carbs + electrolytes</div><div class="alarm-sub">Load up for tomorrow's climb.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd1-13', 'Salty snack before bed + electrolytes')">
-          <div class="alarm-time-col">9:00pm</div>
-          <div><div class="alarm-label">Salty snack before bed + electrolytes</div><div class="alarm-sub">Pre-load sodium for the climb. Lights out by 9:30.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-      </div>
-    </div>
-
-    <div id="d2-alarms" style="display:none">
-      <div class="alarm-list">
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd2-0', 'Wake up — eat + fill all water vessels')">
-          <div class="alarm-time-col">2:00am</div>
-          <div><div class="alarm-label">Wake up — eat + fill all water vessels</div><div class="alarm-sub">300–400 cal. LMNT in your bottle. Fill everything.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd2-1', 'Start climbing — sip water, watch footing')">
-          <div class="alarm-time-col">3:00am</div>
-          <div><div class="alarm-label">Start climbing — sip water, watch footing</div><div class="alarm-sub">Headlamps on. Pipeline breaks = uneven trail near Phantom.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd2-2', 'Add electrolytes to bottle now')">
-          <div class="alarm-time-col">3:45am</div>
-          <div><div class="alarm-label">Add electrolytes to bottle now</div><div class="alarm-sub">LMNT or Nuun. Keep sipping.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd2-3', 'Havasupai Gardens — eat full meal, refill water')">
-          <div class="alarm-time-col">4:30am</div>
-          <div><div class="alarm-label">Havasupai Gardens — eat full meal, refill water</div><div class="alarm-sub">Most important eating stop of Day 2. Hard climbing starts above here.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd2-4', 'Gel #1 + electrolytes')">
-          <div class="alarm-time-col">5:15am</div>
-          <div><div class="alarm-label">Gel #1 + electrolytes</div><div class="alarm-sub">GU gel + electrolyte sip. Shorten your stride on switchbacks.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd2-5', '3-Mile Resthouse — gel, short rest, refill')">
-          <div class="alarm-time-col">5:30am</div>
-          <div><div class="alarm-label">3-Mile Resthouse — gel, short rest, refill</div><div class="alarm-sub">Water here. Keep it brief — stay ahead of the sun.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd2-6', 'Gel #2 + electrolytes')">
-          <div class="alarm-time-col">6:15am</div>
-          <div><div class="alarm-label">Gel #2 + electrolytes</div><div class="alarm-sub">GU gel. Final hard push above here.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd2-7', '1.5-Mile Resthouse — final gel, honest check-in')">
-          <div class="alarm-time-col">6:30am</div>
-          <div><div class="alarm-label">1.5-Mile Resthouse — final gel, honest check-in</div><div class="alarm-sub">1.5 miles to rim. How do you both feel? Steady beats fast.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-        <div class="alarm-row" onclick="toggleAlarm(this, 'd2-8', 'South Rim — eat immediately, you\'re done!')">
-          <div class="alarm-time-col">7:30am</div>
-          <div><div class="alarm-label">South Rim — eat immediately, you're done!</div><div class="alarm-sub">Salt, carbs, protein. You earned it.</div></div>
-          <div class="alarm-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        </div>
-      </div>
-    </div>
-    <p class="alarm-note">Tap any alarm to mark it done on the trail. Notifications fire at the scheduled time — your phone must be added to your home screen from the GitHub Pages link for background alerts to work. Alarms fire on the correct date automatically (July 18 for Day 1, July 19 for Day 2).</p>
-  </div>
-
-  <div class="section">
     <div class="section-label">Carry food reference — per person, both days</div>
     <div class="proto-list">
       <div class="proto-row"><div class="proto-key">Energy gels</div><div class="proto-val">8 total — Gu or Maurten with sodium. Primary fuel for The Box and upper Bright Angel switchbacks when solid food is hard to stomach.</div></div>
@@ -1269,7 +1206,7 @@
       <div class="illness-body">
         <div class="illness-row"><strong>Risk:</strong> Can occur with no visible storm overhead. The burned watershed channels water with almost no absorption — a distant storm means fast-rising water in the drainage.</div>
         <div class="illness-row"><strong>Signs:</strong> Roaring noise upstream, sudden rise in creek color or volume, smell of mud</div>
-        <div class="illness-row"><strong>Action:</strong> Move to high ground immediately. Face upstream when near the creek. Do not re-enter the drainage until the all-clear. Register for GCRIVERALERTS before your trip.</div>
+        <div class="illness-row"><strong>Action:</strong> Move to high ground immediately. Face upstream when near the creek. Do not re-enter the drainage until the all-clear. Register for GCRIVERALERTS before your trip — text GCRIVERALERTS to 928-707-7842.</div>
       </div>
     </div>
   </div>
@@ -1327,12 +1264,170 @@
 
     <div class="cl-cat">Pre-trip admin</div>
     <ul class="cl">
-      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Register for GCRIVERALERTS</div><div class="cl-note">gcriveralerts.com — flash flood and evacuation alerts for the inner canyon. Non-optional in 2026 given the burn scar risk.</div></div></li>
+      <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Register for GCRIVERALERTS</div><div class="cl-note">Text GCRIVERALERTS to 928-707-7842. Must receive a confirmation text back to complete signup. Flash flood and evacuation alerts for the inner canyon.</div></div></li>
       <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Verify Silver Bridge and River Trail open — check July 14–15</div><div class="cl-note">nps.gov/grca/planyourvisit/key-messages.htm — confirm closure lifted after June 30, 2026.</div></div></li>
       <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Tell someone your full itinerary and check-in plan</div><div class="cl-note">Name, contact, and what to do if you're overdue. Share this document with them.</div></div></li>
       <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Trim toenails a few days before the trip</div><div class="cl-note">5,760 ft of descent punishes long toenails. Do this several days before, not the morning of.</div></div></li>
       <li onclick="toggle(this)"><div class="cl-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cl-text">Check NPS trail alerts the week of your trip</div><div class="cl-note">nps.gov/grca/planyourvisit/key-messages.htm — water status changes frequently due to pipeline breaks.</div></div></li>
     </ul>
+  </div>
+</div>
+
+
+<!-- TRAIL TRACKER -->
+<div id="page-tracker" class="page">
+  <div class="section">
+    <div class="tracker-header">
+      <div class="tracker-day-label">Next waypoint in</div>
+      <div class="tracker-countdown" id="tc-countdown">--:--</div>
+      <div class="tracker-next-label">Next up:</div>
+      <div class="tracker-next-name" id="tc-next-name">Select your day below to start</div>
+    </div>
+
+    <div class="tracker-day-tabs">
+      <button class="tracker-day-tab active" onclick="switchTrackerDay('d1', this)">Day 1 — July 18</button>
+      <button class="tracker-day-tab" onclick="switchTrackerDay('d2', this)">Day 2 — July 19</button>
+    </div>
+
+    <div class="tracker-setup-card" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1rem;">
+      <div style="background:var(--canyon-dusk);padding:10px 14px;">
+        <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.9);letter-spacing:0.05em;text-transform:uppercase;">Before you hike — set phone alarms</div>
+      </div>
+      <div style="padding:10px 14px;border-bottom:1px solid var(--border);">
+        <div style="font-size:13px;color:var(--text);line-height:1.5;">Open your iPhone <strong>Clock app</strong> the night before and set an alarm for each time below. Label each one with the waypoint name so you know what to do when it fires at 3am.</div>
+      </div>
+      <div style="padding:8px 14px;border-bottom:1px solid var(--border);">
+        <div style="font-size:11px;font-weight:700;color:var(--canyon-rust);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">Day 1 — July 18</div>
+        <div style="font-size:12px;color:var(--text-mid);line-height:1.8;">2:30am &nbsp;·&nbsp; 4:30am &nbsp;·&nbsp; 5:15am &nbsp;·&nbsp; 6:00am &nbsp;·&nbsp; 6:45am &nbsp;·&nbsp; 7:15am &nbsp;·&nbsp; 8:00am &nbsp;·&nbsp; 8:30am &nbsp;·&nbsp; 9:30am &nbsp;·&nbsp; 10:00am &nbsp;·&nbsp; 10:45am &nbsp;·&nbsp; 11:00am &nbsp;·&nbsp; 7:00pm &nbsp;·&nbsp; 9:00pm</div>
+      </div>
+      <div style="padding:8px 14px;">
+        <div style="font-size:11px;font-weight:700;color:var(--canyon-rust);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">Day 2 — July 19</div>
+        <div style="font-size:12px;color:var(--text-mid);line-height:1.8;">2:00am &nbsp;·&nbsp; 3:00am &nbsp;·&nbsp; 3:45am &nbsp;·&nbsp; 4:30am &nbsp;·&nbsp; 5:15am &nbsp;·&nbsp; 5:30am &nbsp;·&nbsp; 6:15am &nbsp;·&nbsp; 6:30am</div>
+      </div>
+    </div>
+    <p class="tracker-tip">On trail: tap a waypoint when you arrive to mark it done — the countdown immediately starts ticking to your next stop. Time shown is the suggested gap between waypoints, not a fixed clock time, so it adjusts to your actual pace.</p>
+
+    <div id="tracker-d1">
+      <div class="tracker-list" id="tlist-d1">
+        <div class="tracker-row" onclick="trackerTap('d1',0)" data-idx="0">
+          <div class="t-time">2:30am</div>
+          <div class="t-body"><div class="t-label">Wake up — eat breakfast + electrolytes</div><div class="t-sub">400–500 cal + first LMNT of the day</div><div class="t-gap">→ 2 hr to trailhead start</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d1',1)" data-idx="1">
+          <div class="t-time">4:30am</div>
+          <div class="t-body"><div class="t-label">Start hiking — headlamps on, begin sipping</div><div class="t-sub">Move fast through burn scar. No water at trailhead.</div><div class="t-gap">→ ~45 min to Supai Tunnel</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d1',2)" data-idx="2">
+          <div class="t-time">~5:15am</div>
+          <div class="t-body"><div class="t-label">Supai Tunnel (~1.7 mi) — eat snack</div><div class="t-sub">Burn scar cleared. Bar or nuts. No water here.</div><div class="t-gap">→ ~45 min to Manzanita</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d1',3)" data-idx="3">
+          <div class="t-time">~6:00am</div>
+          <div class="t-body"><div class="t-label">Manzanita (~3.0 mi) — drink 1L, refill, eat</div><div class="t-sub">First water. Fill everything before leaving.</div><div class="t-gap">→ ~75 min to Roaring Springs</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d1',4)" data-idx="4">
+          <div class="t-time">~7:15am</div>
+          <div class="t-body"><div class="t-label">Roaring Springs (~5.0 mi) — real food, refill</div><div class="t-sub">Tortilla + PB or substantial bar. Longer break.</div><div class="t-gap">→ ~75 min to Cottonwood</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d1',5)" data-idx="5">
+          <div class="t-time">~8:30am</div>
+          <div class="t-body"><div class="t-label">Cottonwood (~6.8 mi) — full meal, campground tap</div><div class="t-sub">Biggest eating stop of Day 1. Rest 60 min. Fuel for The Box.</div><div class="t-gap">→ 60 min mandatory rest, then depart</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d1',6)" data-idx="6">
+          <div class="t-time">~9:30am</div>
+          <div class="t-body"><div class="t-label">Depart Cottonwood — umbrella up, gaiter wet</div><div class="t-sub">The Box begins. Gels only — no solid food stops.</div><div class="t-gap">→ 30 min — Gel #1</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d1',7)" data-idx="7">
+          <div class="t-time">~10:00am</div>
+          <div class="t-body"><div class="t-label">Gel #1 + electrolytes — keep moving</div><div class="t-sub">GU gel + sip electrolyte water. Wet gaiter.</div><div class="t-gap">→ 45 min — Gel #2</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d1',8)" data-idx="8">
+          <div class="t-time">~10:45am</div>
+          <div class="t-body"><div class="t-label">Gel #2 — keep moving</div><div class="t-sub">GU gel. Ribbon Falls coming up soon.</div><div class="t-gap">→ 15 min — Ribbon Falls</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d1',9)" data-idx="9">
+          <div class="t-time">~11:00am</div>
+          <div class="t-body"><div class="t-label">Ribbon Falls — soak completely</div><div class="t-sub">Clothes, hat, hair — everything wet. Phantom is 1.7 mi away.</div><div class="t-gap">→ ~90 min to Phantom Ranch</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d1',10)" data-idx="10">
+          <div class="t-time">~12:30pm</div>
+          <div class="t-body"><div class="t-label">Phantom Ranch — check in, eat, soak, rest</div><div class="t-sub">Canteen open. Soak in Bright Angel Creek. Done for the day.</div><div class="t-gap">→ Rest. Next alarm: dinner at 7:00pm</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d1',11)" data-idx="11">
+          <div class="t-time">7:00pm</div>
+          <div class="t-body"><div class="t-label">Dinner at Phantom Ranch — carbs + electrolytes</div><div class="t-sub">Load up glycogen for tomorrow's climb.</div><div class="t-gap">→ ~2 hrs to bedtime snack</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d1',12)" data-idx="12">
+          <div class="t-time">9:00pm</div>
+          <div class="t-body"><div class="t-label">Salty snack before bed + electrolytes</div><div class="t-sub">Pre-load sodium. Lights out by 9:30pm.</div><div class="t-gap">→ Wake up at 2:00am for Day 2</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tracker-d2" style="display:none">
+      <div class="tracker-list" id="tlist-d2">
+        <div class="tracker-row" onclick="trackerTap('d2',0)" data-idx="0">
+          <div class="t-time">2:00am</div>
+          <div class="t-body"><div class="t-label">Wake up — eat + fill all water vessels</div><div class="t-sub">300–400 cal. LMNT in your bottle. Fill everything.</div><div class="t-gap">→ 60 min to depart</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d2',1)" data-idx="1">
+          <div class="t-time">3:00am</div>
+          <div class="t-body"><div class="t-label">Depart Phantom Ranch — begin climbing</div><div class="t-sub">Headlamps on. Watch footing — pipeline break upheaved trail near Phantom.</div><div class="t-gap">→ ~45 min — electrolytes</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d2',2)" data-idx="2">
+          <div class="t-time">~3:45am</div>
+          <div class="t-body"><div class="t-label">Add electrolytes to bottle now</div><div class="t-sub">LMNT or Nuun. Keep sipping and moving.</div><div class="t-gap">→ ~45 min to Havasupai Gardens</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d2',3)" data-idx="3">
+          <div class="t-time">~4:30am</div>
+          <div class="t-body"><div class="t-label">Havasupai Gardens (~4.5 mi) — full meal, refill</div><div class="t-sub">Most important eating stop of Day 2. Hard climbing starts above here.</div><div class="t-gap">→ ~60 min to 3-Mile Resthouse</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d2',4)" data-idx="4">
+          <div class="t-time">~5:15am</div>
+          <div class="t-body"><div class="t-label">Gel #1 + electrolytes — shorten your stride</div><div class="t-sub">GU gel. Short quick steps on steep grade.</div><div class="t-gap">→ ~15 min to 3-Mile Resthouse</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d2',5)" data-idx="5">
+          <div class="t-time">~5:30am</div>
+          <div class="t-body"><div class="t-label">3-Mile Resthouse (~6.5 mi) — gel, refill, short rest</div><div class="t-sub">Water here. Keep it brief — stay ahead of the sun.</div><div class="t-gap">→ ~60 min to 1.5-Mile Resthouse</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d2',6)" data-idx="6">
+          <div class="t-time">~6:15am</div>
+          <div class="t-body"><div class="t-label">Gel #2 + electrolytes</div><div class="t-sub">GU gel. Final hard push to the rim above here.</div><div class="t-gap">→ ~15 min to 1.5-Mile Resthouse</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d2',7)" data-idx="7">
+          <div class="t-time">~6:30am</div>
+          <div class="t-body"><div class="t-label">1.5-Mile Resthouse (~8.0 mi) — final gel, check in</div><div class="t-sub">1.5 miles to the rim. How do you both feel? Steady beats fast.</div><div class="t-gap">→ ~60 min to South Rim</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="tracker-row" onclick="trackerTap('d2',8)" data-idx="8">
+          <div class="t-time">~7:30am</div>
+          <div class="t-body"><div class="t-label">South Rim — eat immediately. You made it.</div><div class="t-sub">Salt, carbs, protein. Two days. Rim to rim. Done.</div><div class="t-gap">→ 🎉</div></div>
+          <div class="t-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="tracker-reset-btn" onclick="resetTracker()">Reset all checkmarks for this day</button>
   </div>
 </div>
 
@@ -1492,6 +1587,141 @@
       }
     });
   });
+
+  // ── Trail Tracker ──
+  const TRACKER_GAPS = {
+    d1: [120, 45, 45, 75, 75, 60, 30, 45, 15, 90, 120, 120, 0],
+    d2: [60, 45, 45, 60, 15, 60, 15, 60, 0]
+  };
+
+  let trackerDay = 'd1';
+  let countdownInterval = null;
+  let countdownEnd = null;
+
+  function switchTrackerDay(day, btn) {
+    trackerDay = day;
+    document.getElementById('tracker-d1').style.display = day === 'd1' ? 'block' : 'none';
+    document.getElementById('tracker-d2').style.display = day === 'd2' ? 'block' : 'none';
+    document.querySelectorAll('.tracker-day-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    updateTrackerHeader();
+  }
+
+  function trackerTap(day, idx) {
+    const rows = document.querySelectorAll(`#tlist-${day} .tracker-row`);
+    const row = rows[idx];
+    const wasDone = row.classList.contains('t-done');
+
+    if (wasDone) {
+      row.classList.remove('t-done');
+    } else {
+      row.classList.add('t-done');
+      row.classList.remove('t-active');
+      // Start countdown to next item
+      const gapMins = TRACKER_GAPS[day][idx];
+      if (gapMins > 0) {
+        startCountdown(gapMins, rows[idx + 1]);
+      } else {
+        // Last item
+        clearInterval(countdownInterval);
+        document.getElementById('tc-countdown').textContent = '🎉';
+        document.getElementById('tc-countdown').className = 'tracker-countdown done-all';
+        document.getElementById('tc-next-name').textContent = 'All done — you made it!';
+        document.getElementById('tc-next-label').textContent = '';
+      }
+    }
+
+    // Save state
+    try {
+      const states = {};
+      rows.forEach((r, i) => { states[i] = r.classList.contains('t-done') ? 1 : 0; });
+      localStorage.setItem('tracker-' + day, JSON.stringify(states));
+    } catch(e) {}
+
+    updateTrackerHeader();
+  }
+
+  function startCountdown(minutes, nextRow) {
+    clearInterval(countdownInterval);
+    countdownEnd = Date.now() + minutes * 60 * 1000;
+    try { localStorage.setItem('tracker-countdown-end', countdownEnd); } catch(e) {}
+
+    // Highlight next row
+    document.querySelectorAll('.tracker-row').forEach(r => r.classList.remove('t-active'));
+    if (nextRow) {
+      nextRow.classList.add('t-active');
+      const label = nextRow.querySelector('.t-label');
+      document.getElementById('tc-next-name').textContent = label ? label.textContent : '';
+      document.getElementById('tc-next-label').textContent = 'Next up:';
+    }
+
+    countdownInterval = setInterval(() => {
+      const remaining = countdownEnd - Date.now();
+      if (remaining <= 0) {
+        clearInterval(countdownInterval);
+        document.getElementById('tc-countdown').textContent = '00:00';
+        document.getElementById('tc-countdown').className = 'tracker-countdown urgent';
+        // Vibrate if supported
+        if (navigator.vibrate) navigator.vibrate([300, 100, 300]);
+        return;
+      }
+      const mins = Math.floor(remaining / 60000);
+      const secs = Math.floor((remaining % 60000) / 1000);
+      const display = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+      const el = document.getElementById('tc-countdown');
+      el.textContent = display;
+      el.className = 'tracker-countdown' + (mins < 5 ? ' urgent' : '');
+    }, 1000);
+  }
+
+  function updateTrackerHeader() {
+    const rows = document.querySelectorAll(`#tlist-${trackerDay} .tracker-row`);
+    let nextUndone = null;
+    rows.forEach(r => {
+      if (!r.classList.contains('t-done') && !nextUndone) nextUndone = r;
+    });
+    if (nextUndone && !countdownInterval) {
+      const label = nextUndone.querySelector('.t-label');
+      document.getElementById('tc-next-name').textContent = label ? label.textContent : '';
+      document.getElementById('tc-next-label').textContent = 'Next up:';
+    }
+  }
+
+  function resetTracker() {
+    if (!confirm('Reset all checkmarks for this day?')) return;
+    clearInterval(countdownInterval);
+    countdownInterval = null;
+    countdownEnd = null;
+    document.querySelectorAll(`#tlist-${trackerDay} .tracker-row`).forEach(r => {
+      r.classList.remove('t-done', 't-active');
+    });
+    document.getElementById('tc-countdown').textContent = '--:--';
+    document.getElementById('tc-countdown').className = 'tracker-countdown';
+    document.getElementById('tc-next-label').textContent = 'Next up:';
+    document.getElementById('tc-next-name').textContent = 'Tap a waypoint when you arrive';
+    try { localStorage.removeItem('tracker-' + trackerDay); localStorage.removeItem('tracker-countdown-end'); } catch(e) {}
+  }
+
+  // Restore tracker state on load
+  document.addEventListener('DOMContentLoaded', () => {
+    ['d1','d2'].forEach(day => {
+      try {
+        const saved = JSON.parse(localStorage.getItem('tracker-' + day) || '{}');
+        const rows = document.querySelectorAll(`#tlist-${day} .tracker-row`);
+        rows.forEach((r, i) => { if (saved[i] === 1) r.classList.add('t-done'); });
+      } catch(e) {}
+    });
+    // Restore countdown if still running
+    try {
+      const savedEnd = parseInt(localStorage.getItem('tracker-countdown-end') || '0');
+      if (savedEnd > Date.now()) {
+        const remaining = Math.floor((savedEnd - Date.now()) / 60000);
+        startCountdown(remaining, null);
+      }
+    } catch(e) {}
+    updateTrackerHeader();
+  });
+
 </script>
 </body>
 </html>
